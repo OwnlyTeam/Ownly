@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Ownly.Views.Pages.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Ownly.Views.Controls">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Padding="48,42,48,48" MaxWidth="1120" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="26" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="34" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="WELCOME TO OWNLY" Style="{StaticResource OwnlyEyebrowStyle}" />
+                <TextBlock Text="Your PC. Your way." Style="{StaticResource OwnlyDisplayTitleStyle}" Margin="0,10,0,8" />
+                <TextBlock Text="Reversible tweaks for Windows, each one explained before it runs and logged so you can undo it."
+                           FontSize="16" TextWrapping="Wrap" MaxWidth="640" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+            </StackPanel>
+
+            <Border Grid.Row="2" Style="{StaticResource OwnlyCardStyle}" Padding="30">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="220" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="GETTING STARTED" Style="{StaticResource OwnlyEyebrowStyle}" />
+                        <TextBlock Text="Pick a section from the menu." FontSize="26" FontWeight="SemiBold"
+                                   Foreground="{StaticResource OwnlyTextBrush}" Margin="0,12,0,10" />
+                        <TextBlock TextWrapping="Wrap" MaxWidth="520" FontSize="15" LineHeight="23"
+                                   Foreground="{StaticResource OwnlyMutedTextBrush}"
+                                   Text="Clean removes clutter. Customize reshapes Windows. Optimize tunes performance. Privacy limits data collection. Every change lands in Changes with a Restore button." />
+                    </StackPanel>
+                    <Border Grid.Column="1" Background="{StaticResource OwnlySurfaceRaisedBrush}" CornerRadius="14"
+                            Padding="18" VerticalAlignment="Center" BorderBrush="{StaticResource OwnlyBorderStrongBrush}" BorderThickness="1">
+                        <StackPanel Spacing="10" HorizontalAlignment="Center">
+                            <controls:OwnlyGlyph Width="96" Height="96" HorizontalAlignment="Center" />
+                            <TextBlock Text="OWNLY 0.0.1" FontSize="13" FontWeight="SemiBold" CharacterSpacing="90"
+                                       Foreground="{StaticResource OwnlyTextBrush}" HorizontalAlignment="Center" Margin="0,6,0,0" />
+                            <TextBlock Text="PREVIEW BUILD" FontSize="10" FontWeight="SemiBold" CharacterSpacing="90"
+                                       Foreground="{StaticResource OwnlyMutedTextBrush}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <StackPanel Grid.Row="4">
+                <TextBlock Text="YOUR SYSTEM" Style="{StaticResource OwnlySectionTitleStyle}" />
+                <TextBlock Text="Read-only details from this device." FontSize="14"
+                           Foreground="{StaticResource OwnlyMutedTextBrush}" Margin="0,6,0,18" />
+                <Grid ColumnSpacing="12" Margin="0,0,0,34">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.15*" />
+                        <ColumnDefinition Width="1.35*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Style="{StaticResource OwnlyCardStyle}" Padding="18">
+                        <StackPanel Spacing="8">
+                            <FontIcon Glyph="&#xE77B;" FontSize="20" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="DEVICE" FontSize="11" CharacterSpacing="90" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                            <TextBlock x:Name="DeviceNameText" Text="&#x2014;" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource OwnlyCardStyle}" Padding="18">
+                        <StackPanel Spacing="8">
+                            <FontIcon Glyph="&#xE7F4;" FontSize="20" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="WINDOWS" FontSize="11" CharacterSpacing="90" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                            <TextBlock x:Name="WindowsVersionText" Text="&#x2014;" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="2" Style="{StaticResource OwnlyCardStyle}" Padding="18">
+                        <StackPanel Spacing="8">
+                            <FontIcon Glyph="&#xEC4A;" FontSize="20" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="PROCESSOR" FontSize="11" CharacterSpacing="90" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                            <TextBlock x:Name="ProcessorText" Text="&#x2014;" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="3" Style="{StaticResource OwnlyCardStyle}" Padding="18">
+                        <StackPanel Spacing="8">
+                            <FontIcon Glyph="&#xE950;" FontSize="20" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="MEMORY" FontSize="11" CharacterSpacing="90" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                            <TextBlock x:Name="MemoryText" Text="&#x2014;" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                <Border Style="{StaticResource OwnlyCardStyle}" Padding="20" Margin="0,0,0,34">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xEDA2;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" Margin="0,0,16,0" />
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock Text="SYSTEM DRIVE" FontSize="11" CharacterSpacing="90" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                            <TextBlock x:Name="StorageDetailText" Text="&#x2014;" FontSize="13" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" x:Name="StorageText" Text="&#x2014;" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+                <TextBlock Text="WHAT'S INSIDE" Style="{StaticResource OwnlySectionTitleStyle}" />
+                <TextBlock Text="Every section works on your user account and is reversible." FontSize="14" Foreground="{StaticResource OwnlyMutedTextBrush}" Margin="0,6,0,18" />
+                <Grid ColumnSpacing="16" RowSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                        <StackPanel Spacing="10">
+                            <FontIcon Glyph="&#xE74D;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="Clean" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                            <TextBlock Text="Scan for temp files and optional apps, and limit Windows suggestions." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                        <StackPanel Spacing="10">
+                            <FontIcon Glyph="&#xE70F;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="Customize" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                            <TextBlock Text="Dark mode, classic right-click menu, taskbar and File Explorer tweaks." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="2" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                        <StackPanel Spacing="10">
+                            <FontIcon Glyph="&#xEC4A;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="Optimize" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                            <TextBlock Text="Visual-effects profile, Game Mode, power modes, and startup review." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Row="1" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                        <StackPanel Spacing="10">
+                            <FontIcon Glyph="&#xE72E;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="Privacy" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                            <TextBlock Text="Limit ad personalization, activity history, and camera / mic / location access." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                        <StackPanel Spacing="10">
+                            <FontIcon Glyph="&#xE90F;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="Tools" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                            <TextBlock Text="Startup manager, power modes, and Ownly's backup / data folder." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                        <StackPanel Spacing="10">
+                            <FontIcon Glyph="&#xE81C;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
+                            <TextBlock Text="Changes" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                            <TextBlock Text="A record of everything Ownly changed, each with a one-click Restore." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Page>

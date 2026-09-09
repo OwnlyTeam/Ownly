@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Ownly.Views.DisclaimerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Ownly.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Ownly">
+
+    <Grid Background="{StaticResource OwnlyBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="AppTitleBar" Grid.Row="0" Background="Transparent">
+            <StackPanel Orientation="Horizontal" Spacing="10" Margin="16,0,0,0" VerticalAlignment="Center">
+                <controls:OwnlyGlyph Width="16" Height="16" />
+                <TextBlock Text="OWNLY" FontSize="12" FontWeight="SemiBold" CharacterSpacing="200"
+                           Foreground="{StaticResource OwnlyMutedTextBrush}" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Padding="40,14,40,32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="18" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <controls:OwnlyGlyph Width="46" Height="46" Margin="0,3,20,0" VerticalAlignment="Top" />
+                <StackPanel Grid.Column="1" Spacing="8">
+                    <TextBlock Text="OWNLY" Style="{StaticResource OwnlyEyebrowStyle}" />
+                    <TextBlock x:Name="TitleText" FontSize="27" FontWeight="SemiBold"
+                               Foreground="{StaticResource OwnlyTextBrush}" Text="Before you use Ownly" />
+                    <TextBlock x:Name="IntroText" FontSize="14" LineHeight="21" TextWrapping="Wrap"
+                               Foreground="{StaticResource OwnlyMutedTextBrush}" MaxWidth="640" HorizontalAlignment="Left" />
+                </StackPanel>
+            </Grid>
+
+            <Border Grid.Row="2" Style="{StaticResource OwnlyCardStyle}" Padding="2">
+                <ScrollViewer x:Name="LegalScroller" Padding="24,20,24,20"
+                              VerticalScrollBarVisibility="Auto"
+                              ViewChanged="LegalScroller_ViewChanged">
+                    <TextBlock x:Name="BodyText" FontSize="13.5" LineHeight="21"
+                               TextWrapping="Wrap" IsTextSelectionEnabled="True"
+                               Foreground="{StaticResource OwnlyTextBrush}" />
+                </ScrollViewer>
+            </Border>
+
+            <StackPanel Grid.Row="3" Spacing="10" Margin="2,18,2,0">
+                <TextBlock x:Name="ScrollHintText" FontSize="12" FontWeight="SemiBold" CharacterSpacing="40"
+                           Foreground="{StaticResource OwnlyWarningBrush}"
+                           Text="SCROLL TO THE BOTTOM TO CONTINUE" />
+                <CheckBox x:Name="AgreeCheck" IsEnabled="False" Checked="AgreeCheck_Toggled" Unchecked="AgreeCheck_Toggled">
+                    <TextBlock x:Name="AgreeCheckLabel" TextWrapping="Wrap" FontSize="13"
+                               Foreground="{StaticResource OwnlyTextBrush}" />
+                </CheckBox>
+            </StackPanel>
+
+            <Grid Grid.Row="4" Margin="0,22,0,0">
+                <Button x:Name="DeclineButton" Content="DECLINE &amp; EXIT" Click="DeclineButton_Click"
+                        HorizontalAlignment="Left" Padding="20,11" />
+                <Button x:Name="AgreeButton" Content="I AGREE &amp; CONTINUE" Click="AgreeButton_Click"
+                        Style="{StaticResource OwnlyPrimaryButtonStyle}" IsEnabled="False"
+                        HorizontalAlignment="Right" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
