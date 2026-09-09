@@ -1,0 +1,414 @@
+<title>Ownly for Windows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  /* ── Ownly · single visual world: black ground, white ink, mono for system detail ── */
+  :root{
+    --ink:#000000;
+    --raise:#0c0c0d;
+    --raise-2:#141416;
+    --edge:#1e1e20;
+    --edge-2:#2f2f33;
+    --paper:#ffffff;
+    --fog:#8b8b8f;
+    --fog-dim:#5a5a5e;
+    --amber:#f5c044;
+    --red:#f06a6a;
+    --maxw:1080px;
+    --step-0:0.8125rem;
+    --step-1:1rem;
+    --step-2:1.375rem;
+    --step-3:2rem;
+    --step-4:3.25rem;
+    --step-5:clamp(3.25rem,8vw,5.5rem);
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    font-size:var(--step-1);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Archivo","IBM Plex Sans",system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-0.02em;line-height:1.04}
+  p{margin:0}
+  a{color:inherit}
+  ::selection{background:var(--paper);color:var(--ink)}
+  :focus-visible{outline:2px solid var(--paper);outline-offset:3px;border-radius:2px}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:0.6875rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--fog);
+  }
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+
+  /* ── top bar ── */
+  header{
+    position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb,var(--ink) 82%,transparent);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--edge);
+  }
+  .bar{display:flex;align-items:center;gap:22px;height:60px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:"Archivo";font-weight:700;letter-spacing:0.24em;font-size:0.9rem}
+  .brand svg{width:20px;height:20px;flex:none}
+  nav.links{margin-left:auto;display:flex;gap:26px;font-size:var(--step-0)}
+  nav.links a{color:var(--fog);text-decoration:none;transition:color .15s}
+  nav.links a:hover{color:var(--paper)}
+  @media (max-width:720px){nav.links{display:none}}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:var(--step-0);font-weight:500;letter-spacing:0.04em;
+    text-decoration:none;white-space:nowrap;
+    padding:11px 20px;border-radius:8px;
+    background:var(--paper);color:var(--ink);
+    border:1px solid var(--paper);
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);background:#e9e9ec}
+  .btn.ghost{background:transparent;color:var(--paper);border-color:var(--edge-2)}
+  .btn.ghost:hover{background:var(--raise-2);border-color:var(--fog-dim)}
+  .btn.sm{padding:8px 15px}
+  .bar .btn{margin-left:22px}
+  @media (max-width:720px){.bar .btn{margin-left:auto}}
+
+  /* ── hero ── */
+  .hero{padding:88px 0 64px;border-bottom:1px solid var(--edge)}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:center}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:44px}}
+  .hero h1{font-size:var(--step-5);font-weight:800;margin:20px 0 22px}
+  .lede{font-size:1.1875rem;line-height:1.55;color:#cfcfd2;max-width:34ch}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:34px}
+  .cta-meta{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.75rem;color:var(--fog);margin-top:16px;letter-spacing:0.03em}
+
+  .ring-mark{width:100%;max-width:132px;height:auto;display:block;margin-bottom:6px}
+  .ring-mark circle{
+    fill:none;stroke:var(--paper);stroke-width:12;stroke-linecap:round;
+    stroke-dasharray:290;stroke-dashoffset:290;
+    transform:rotate(-84deg);transform-origin:50% 50%;
+    animation:draw 1.15s cubic-bezier(.2,.7,.2,1) .15s forwards;
+  }
+  @keyframes draw{to{stroke-dashoffset:26}}
+  @media (prefers-reduced-motion:reduce){.ring-mark circle{animation:none;stroke-dashoffset:26}}
+
+  /* ── app window mock ── */
+  .mock{
+    border:1px solid var(--edge-2);border-radius:12px;overflow:hidden;
+    background:var(--ink);
+    box-shadow:0 40px 80px -40px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.02);
+  }
+  .mock-title{display:flex;align-items:center;gap:9px;height:38px;padding:0 14px;border-bottom:1px solid var(--edge)}
+  .mock-title svg{width:14px;height:14px}
+  .mock-title .wm{font-family:"Archivo";font-weight:700;font-size:0.7rem;letter-spacing:0.2em;color:#d6d6d8}
+  .mock-title .ctl{margin-left:auto;display:flex;gap:16px;color:var(--fog-dim)}
+  .mock-title .ctl span{font-size:0.7rem}
+  .mock-body{display:grid;grid-template-columns:126px 1fr;min-height:270px}
+  .mock-nav{border-right:1px solid var(--edge);padding:12px 0;font-size:0.72rem;color:var(--fog)}
+  .mock-nav div{padding:6px 16px;display:flex;gap:8px;align-items:center}
+  .mock-nav div.on{color:var(--paper);box-shadow:inset 2px 0 0 var(--paper)}
+  .mock-nav .sep{height:1px;background:var(--edge);margin:8px 12px;padding:0}
+  .mock-main{padding:18px 18px 20px}
+  .mock-main .eyebrow{font-size:0.6rem}
+  .mock-main h4{font-family:"Archivo";font-weight:700;font-size:1.05rem;margin:6px 0 14px;letter-spacing:-0.01em}
+  .row{
+    border:1px solid var(--edge);border-radius:9px;background:var(--raise);
+    padding:11px 13px;display:flex;align-items:center;gap:12px;margin-bottom:9px;
+  }
+  .row .t{font-size:0.78rem;font-weight:500;line-height:1.3}
+  .row .chips{display:flex;gap:7px;margin-top:5px}
+  .chip{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.56rem;letter-spacing:0.06em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 5px}
+  .chip.amber{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,var(--edge-2))}
+  .sw{margin-left:auto;flex:none;width:34px;height:19px;border-radius:99px;border:1px solid var(--edge-2);position:relative;background:var(--raise-2)}
+  .sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--fog-dim)}
+  .sw.on{background:var(--paper);border-color:var(--paper)}
+  .sw.on::after{left:auto;right:2px;background:var(--ink)}
+
+  /* ── stats ── */
+  .stats{border-bottom:1px solid var(--edge)}
+  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media (max-width:760px){.stats .wrap{grid-template-columns:repeat(2,1fr)}}
+  .stat{padding:36px 24px 34px;border-right:1px solid var(--edge)}
+  .stat:first-child{padding-left:0}
+  .stat:nth-child(4){border-right:0}
+  @media (max-width:760px){
+    .stat{border-right:0;border-bottom:1px solid var(--edge);padding-left:0}
+    .stat:nth-child(2n){padding-left:24px}
+    .stat:nth-child(3),.stat:nth-child(4){border-bottom:0}
+  }
+  .stat b{font-family:"Archivo";font-weight:800;font-size:2.4rem;letter-spacing:-0.03em;display:block;font-variant-numeric:tabular-nums}
+  .stat span{color:var(--fog);font-size:0.8125rem;display:block;margin-top:6px;max-width:22ch}
+
+  /* ── sections ── */
+  section.block{padding:80px 0;border-bottom:1px solid var(--edge)}
+  .block h2{font-size:var(--step-3);font-weight:700;margin:12px 0 0}
+  .block .intro{color:var(--fog);margin-top:14px;max-width:52ch}
+
+  .cats{margin-top:52px;display:flex;flex-direction:column}
+  .cat{display:grid;grid-template-columns:200px 1fr;gap:40px;padding:30px 0;border-top:1px solid var(--edge)}
+  .cat:last-child{border-bottom:1px solid var(--edge)}
+  @media (max-width:760px){.cat{grid-template-columns:1fr;gap:16px}}
+  .cat h3{font-size:1.375rem;font-weight:700;display:flex;align-items:baseline;gap:12px}
+  .cat h3 i{font-family:"IBM Plex Mono",ui-monospace,monospace;font-style:normal;font-size:0.75rem;color:var(--fog-dim)}
+  .cat .cd{color:var(--fog);font-size:0.9rem;margin-top:8px;max-width:30ch}
+  .cat ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+  .cat li{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:0.9375rem}
+  .cat li .tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.625rem;letter-spacing:0.06em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 6px}
+  .cat li .tag.amber{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,var(--edge-2))}
+  .cat li .tag.red{color:var(--red);border-color:color-mix(in srgb,var(--red) 40%,var(--edge-2))}
+
+  .safety{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media (max-width:760px){.safety{grid-template-columns:1fr}}
+  .safety .s{border:1px solid var(--edge);border-radius:10px;padding:24px;background:var(--raise)}
+  .safety .s .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.7rem;color:var(--fog-dim);letter-spacing:0.1em}
+  .safety .s h3{font-size:1.0625rem;font-weight:700;margin:12px 0 8px}
+  .safety .s p{color:var(--fog);font-size:0.875rem}
+
+  .facts{margin-top:44px;display:flex;flex-direction:column;gap:0}
+  .fact{display:grid;grid-template-columns:180px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--edge);font-size:0.9375rem}
+  .fact:last-child{border-bottom:1px solid var(--edge)}
+  .fact dt{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.75rem;color:var(--fog);letter-spacing:0.04em;padding-top:2px}
+  .fact dd{margin:0;color:#d7d7da}
+  @media (max-width:640px){.fact{grid-template-columns:1fr;gap:4px}}
+  .warn{border:1px solid color-mix(in srgb,var(--amber) 35%,var(--edge-2));border-radius:10px;background:color-mix(in srgb,var(--amber) 6%,var(--raise));padding:20px 22px;margin-top:36px;font-size:0.9rem;color:#e4e4e6}
+  .warn b{color:var(--amber);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.1em;display:block;margin-bottom:8px}
+
+  /* ── final CTA ── */
+  .get{padding:96px 0;text-align:left;border-bottom:1px solid var(--edge)}
+  .get h2{font-size:var(--step-4);font-weight:800}
+  .get p{color:var(--fog);margin:16px 0 34px;max-width:40ch}
+  .get .cta-row{margin-top:0}
+
+  footer{padding:44px 0 60px;color:var(--fog-dim);font-size:0.75rem;line-height:1.8}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between}
+  footer .mono{color:var(--fog)}
+  footer .disc{max-width:52ch}
+</style>
+
+<header>
+  <div class="wrap bar">
+    <span class="brand">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round"/></svg>
+      OWNLY
+    </span>
+    <nav class="links">
+      <a href="#changes">What it changes</a>
+      <a href="#safety">Safety</a>
+      <a href="#install">Before you install</a>
+    </nav>
+    <!-- ▼▼▼  REPLACE href WITH YOUR DOWNLOAD LINK (GitHub release, etc.)  ▼▼▼ -->
+    <a class="btn sm" href="https://github.com/YOUR-USERNAME/ownly/releases/latest">Download</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <svg class="ring-mark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34"/></svg>
+        <p class="eyebrow">Free &nbsp;·&nbsp; Windows 10 &amp; 11 &nbsp;·&nbsp; No account</p>
+        <h1>Windows, your way.</h1>
+        <p class="lede">Ownly strips the noise out of Windows&nbsp;10 and&nbsp;11 &mdash; ads, telemetry, background clutter, forced features &mdash; and writes down every change so you can undo any of it.</p>
+        <div class="cta-row">
+          <!-- ▼▼▼  REPLACE href WITH YOUR DOWNLOAD LINK  ▼▼▼ -->
+          <a class="btn" href="https://github.com/YOUR-USERNAME/ownly/releases/latest">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download for Windows
+          </a>
+          <a class="btn ghost" href="https://github.com/YOUR-USERNAME/ownly">View the source</a>
+        </div>
+        <p class="cta-meta">Ownly 0.0.1 &nbsp;·&nbsp; Preview build &nbsp;·&nbsp; 64-bit (x64) &nbsp;·&nbsp; single file, no installer</p>
+      </div>
+
+      <div class="mock" aria-hidden="true">
+        <div class="mock-title">
+          <svg viewBox="0 0 100 100"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#d6d6d8" stroke-width="13" stroke-linecap="round"/></svg>
+          <span class="wm">OWNLY</span>
+          <span class="ctl"><span>&minus;</span><span>&#9633;</span><span>&times;</span></span>
+        </div>
+        <div class="mock-body">
+          <div class="mock-nav">
+            <div>Overview</div>
+            <div>Clean</div>
+            <div>Customize</div>
+            <div>Optimize</div>
+            <div class="on">Privacy</div>
+            <div>Tools</div>
+            <div class="sep"></div>
+            <div>Changes</div>
+            <div>Activity</div>
+          </div>
+          <div class="mock-main">
+            <p class="eyebrow">Privacy</p>
+            <h4>Your privacy.</h4>
+            <div class="row">
+              <div>
+                <div class="t">Set diagnostic data to the minimum</div>
+                <div class="chips"><span class="chip amber">MODERATE RISK</span><span class="chip">NEEDS ADMIN</span></div>
+              </div>
+              <span class="sw on"></span>
+            </div>
+            <div class="row">
+              <div>
+                <div class="t">Turn off online speech recognition</div>
+                <div class="chips"><span class="chip">LOW RISK</span></div>
+              </div>
+              <span class="sw"></span>
+            </div>
+            <div class="row">
+              <div>
+                <div class="t">Stop tracking which apps you open</div>
+                <div class="chips"><span class="chip">LOW RISK</span></div>
+              </div>
+              <span class="sw on"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap">
+      <div class="stat"><b>40+</b><span>reversible Windows tweaks, grouped by what they touch</span></div>
+      <div class="stat"><b>1</b><span>click in the Changes list to undo any of them</span></div>
+      <div class="stat"><b>0</b><span>telemetry, accounts, or background services of its own</span></div>
+      <div class="stat"><b>100%</b><span>local &mdash; every action is logged with the exact command it ran</span></div>
+    </div>
+  </section>
+
+  <section class="block" id="changes">
+    <div class="wrap">
+      <p class="eyebrow">What it changes</p>
+      <h2>Five places Windows gets in your way.</h2>
+      <p class="intro">Every option explains itself before it runs, carries a risk label, and &mdash; where Windows allows it &mdash; can be switched straight back.</p>
+
+      <div class="cats">
+        <div class="cat">
+          <div><h3>Clean <i>&mdash; noise</i></h3><p class="cd">Cut the ads, suggestions and background clutter.</p></div>
+          <ul>
+            <li>Remove web results from Start search <span class="tag">LOW</span></li>
+            <li>Turn off Windows Copilot <span class="tag amber">MODERATE</span></li>
+            <li>Stop auto-installing suggested apps <span class="tag">NEEDS ADMIN</span></li>
+            <li>Scan for temp files, startup items and optional apps</li>
+          </ul>
+        </div>
+        <div class="cat">
+          <div><h3>Customize <i>&mdash; feel</i></h3><p class="cd">Make the desktop behave the way you expect.</p></div>
+          <ul>
+            <li>Classic right-click menu <span class="tag">LOW</span></li>
+            <li>Left-align the taskbar &middot; show file extensions <span class="tag">LOW</span></li>
+            <li>Seconds in the clock &middot; "End task" on the taskbar <span class="tag">LOW</span></li>
+            <li>This PC and Recycle Bin back on the desktop <span class="tag">LOW</span></li>
+          </ul>
+        </div>
+        <div class="cat">
+          <div><h3>Optimize <i>&mdash; speed</i></h3><p class="cd">Trim the things that cost you responsiveness.</p></div>
+          <ul>
+            <li>Best-performance visual effects &middot; Game Mode <span class="tag">LOW</span></li>
+            <li>Remove the menu-open and startup-app delays <span class="tag">LOW</span></li>
+            <li>Turn off Fast Startup &middot; disable hibernation <span class="tag amber">MODERATE</span></li>
+            <li>Power modes &middot; startup manager &middot; disable the telemetry service <span class="tag amber">MODERATE</span></li>
+          </ul>
+        </div>
+        <div class="cat">
+          <div><h3>Privacy <i>&mdash; data</i></h3><p class="cd">Close the taps Windows leaves running.</p></div>
+          <ul>
+            <li>Set diagnostic data to the minimum <span class="tag">NEEDS ADMIN</span></li>
+            <li>Limit the advertising ID, activity history and cloud search <span class="tag">LOW</span></li>
+            <li>Turn off online speech recognition and typing collection <span class="tag">LOW</span></li>
+            <li>Deny camera, microphone and location to apps <span class="tag amber">MODERATE</span></li>
+          </ul>
+        </div>
+        <div class="cat">
+          <div><h3>Tools <i>&mdash; fix</i></h3><p class="cd">The maintenance jobs you'd otherwise google.</p></div>
+          <ul>
+            <li>Flush the DNS cache &middot; restart Explorer <span class="tag">LOW</span></li>
+            <li>Clear the Windows Update cache <span class="tag amber">MODERATE</span></li>
+            <li>Create a system restore point <span class="tag amber">MODERATE</span></li>
+            <li>Run SFC and DISM to repair Windows <span class="tag amber">MODERATE</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="safety">
+    <div class="wrap">
+      <p class="eyebrow">Safety</p>
+      <h2>Nothing happens behind your back.</h2>
+      <p class="intro">Ownly is built so that any single change can be found, understood, and taken back.</p>
+
+      <div class="safety">
+        <div class="s">
+          <div class="n">FIRST RUN</div>
+          <h3>It reads you the terms</h3>
+          <p>A full disclaimer you have to scroll through and accept before the app will open. Anything you do is on you &mdash; and it says so, in plain language.</p>
+        </div>
+        <div class="s">
+          <div class="n">EVERY CHANGE</div>
+          <h3>Lands in the Changes list</h3>
+          <p>User-level settings apply instantly. Machine-level ones ask for a Windows permission prompt. Both show up with a one-click <span class="mono">Restore</span>.</p>
+        </div>
+        <div class="s">
+          <div class="n">ALWAYS</div>
+          <h3>The Activity log shows the command</h3>
+          <p>Every action &mdash; and every undo &mdash; is written down with the exact registry write or command it ran, and whether it needed admin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="install">
+    <div class="wrap">
+      <p class="eyebrow">Before you install</p>
+      <h2>The honest bits.</h2>
+
+      <dl class="facts">
+        <div class="fact"><dt>Works on</dt><dd>Windows 10 (build 1809 and later) and Windows 11, 64-bit (x64). Not for ARM or 32-bit.</dd></div>
+        <div class="fact"><dt>Install</dt><dd>None. It's a single <span class="mono">Ownly.exe</span> &mdash; put it anywhere and double-click. Delete the file to remove it.</dd></div>
+        <div class="fact"><dt>Size</dt><dd>About 470&nbsp;MB. Large because it bundles its own copy of everything it needs, so nothing else has to be installed.</dd></div>
+        <div class="fact"><dt>Account</dt><dd>No sign-up, no login, no connection required. It only writes small settings files on your own PC.</dd></div>
+        <div class="fact"><dt>Undoing changes</dt><dd>From the Changes tab. Machine-level undos ask for the Windows permission prompt again.</dd></div>
+        <div class="fact"><dt>Not Microsoft</dt><dd>Ownly is an independent project. It is not created by, affiliated with, or endorsed by Microsoft. "Windows" is a trademark of Microsoft Corporation.</dd></div>
+      </dl>
+
+      <div class="warn">
+        <b>SMARTSCREEN</b>
+        This preview build isn't code-signed yet, so Windows may show a blue "Windows protected your PC" box the first time you run it. Click <b>More info</b>, then <b>Run anyway</b>. Signing is on the list.
+      </div>
+    </div>
+  </section>
+
+  <section class="get">
+    <div class="wrap">
+      <p class="eyebrow">Get it</p>
+      <h2>Take your PC back.</h2>
+      <p>Free, forever. No catch &mdash; it's a tool, not a product.</p>
+      <div class="cta-row">
+        <!-- ▼▼▼  REPLACE href WITH YOUR DOWNLOAD LINK  ▼▼▼ -->
+        <a class="btn" href="https://github.com/YOUR-USERNAME/ownly/releases/latest">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Download Ownly 0.0.1
+        </a>
+        <a class="btn ghost" href="https://github.com/YOUR-USERNAME/ownly">GitHub</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="disc">Ownly is provided as-is, with no warranty. You are responsible for changes you make to your own system &mdash; see the full terms inside the app. Not affiliated with or endorsed by Microsoft Corporation.</span>
+    <span class="mono">OWNLY 0.0.1 &nbsp;·&nbsp; PREVIEW &nbsp;·&nbsp; 2026</span>
+  </div>
+</footer>
