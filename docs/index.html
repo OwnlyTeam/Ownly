@@ -1,207 +1,292 @@
-<title>Ownly for Windows</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ownly — Windows, your way.</title>
+<meta name="description" content="Ownly is a free, reversible tweaking and debloat tool for Windows 10 and 11. Every change is explained, risk-labelled, and one click to undo.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://ownly.win/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/icon-32.png" type="image/png">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ownly.win/">
+<meta property="og:title" content="Ownly — Windows, your way.">
+<meta property="og:description" content="A free, reversible tweaking and debloat tool for Windows 10 and 11. Every change is explained, risk-labelled, and one click to undo.">
+<meta property="og:image" content="https://ownly.win/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ownly.win/og.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 
 <style>
-  /* ── Ownly · single visual world: black ground, white ink, mono for system detail ── */
-  :root{
-    --ink:#000000;
-    --raise:#0c0c0d;
-    --raise-2:#141416;
-    --edge:#1e1e20;
-    --edge-2:#2f2f33;
-    --paper:#ffffff;
-    --fog:#8b8b8f;
-    --fog-dim:#5a5a5e;
-    --amber:#f5c044;
-    --red:#f06a6a;
-    --maxw:1080px;
-    --step-0:0.8125rem;
-    --step-1:1rem;
-    --step-2:1.375rem;
-    --step-3:2rem;
-    --step-4:3.25rem;
-    --step-5:clamp(3.25rem,8vw,5.5rem);
-  }
+:root{
+  --ink:#000000;
+  --raise:#0b0b0c;
+  --raise-2:#141416;
+  --raise-3:#1c1c1f;
+  --edge:#1e1e20;
+  --edge-2:#313135;
+  --paper:#ffffff;
+  --fog:#8b8b8f;
+  --fog-dim:#59595e;
+  --amber:#f5c044;
+  --red:#f06a6a;
+  --maxw:1120px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --s0:.8125rem; --s1:1rem; --s2:1.35rem; --s3:2rem; --s4:3rem;
+  --s5:clamp(3rem,7.5vw,5.25rem);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:var(--ink);color:var(--paper);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  font-size:var(--s1);line-height:1.6;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:"Archivo","IBM Plex Sans",system-ui,sans-serif;margin:0;line-height:1.03;letter-spacing:-0.02em;text-wrap:balance}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+::selection{background:var(--paper);color:var(--ink)}
+:focus-visible{outline:2px solid var(--paper);outline-offset:3px;border-radius:2px}
 
-  *,*::before,*::after{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
-  body{
-    margin:0;
-    background:var(--ink);
-    color:var(--paper);
-    font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-    font-size:var(--step-1);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  h1,h2,h3{font-family:"Archivo","IBM Plex Sans",system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-0.02em;line-height:1.04}
-  p{margin:0}
-  a{color:inherit}
-  ::selection{background:var(--paper);color:var(--ink)}
-  :focus-visible{outline:2px solid var(--paper);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.6875rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--fog);
+}
 
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
-  .eyebrow{
-    font-family:"IBM Plex Mono",ui-monospace,monospace;
-    font-size:0.6875rem;font-weight:500;letter-spacing:0.22em;text-transform:uppercase;
-    color:var(--fog);
-  }
-  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+/* ── scroll progress bar ── */
+#progress{position:fixed;top:0;left:0;height:2px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--paper);z-index:60;will-change:transform}
 
-  /* ── top bar ── */
-  header{
-    position:sticky;top:0;z-index:20;
-    background:color-mix(in srgb,var(--ink) 82%,transparent);
-    backdrop-filter:blur(12px);
-    border-bottom:1px solid var(--edge);
-  }
-  .bar{display:flex;align-items:center;gap:22px;height:60px}
-  .brand{display:flex;align-items:center;gap:11px;font-family:"Archivo";font-weight:700;letter-spacing:0.24em;font-size:0.9rem}
-  .brand svg{width:20px;height:20px;flex:none}
-  nav.links{margin-left:auto;display:flex;gap:26px;font-size:var(--step-0)}
-  nav.links a{color:var(--fog);text-decoration:none;transition:color .15s}
-  nav.links a:hover{color:var(--paper)}
-  @media (max-width:720px){nav.links{display:none}}
+/* ── header ── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:color-mix(in srgb,var(--ink) 68%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s,background .3s;
+}
+header.stuck{border-bottom-color:var(--edge);background:color-mix(in srgb,var(--ink) 86%,transparent)}
+.bar{display:flex;align-items:center;gap:20px;height:62px}
+.brand{display:flex;align-items:center;gap:11px;font-family:"Archivo";font-weight:800;letter-spacing:.22em;font-size:.88rem}
+.brand .ringwrap{width:22px;height:22px;position:relative;flex:none}
+.brand svg{width:100%;height:100%;overflow:visible}
+.brand .track{stroke:var(--edge-2)}
+.brand .fill{stroke:var(--paper);stroke-dasharray:214;stroke-dashoffset:214;transform:rotate(-90deg);transform-origin:50% 50%}
+nav.links{margin-left:auto;display:flex;gap:28px;font-size:var(--s0)}
+nav.links a{color:var(--fog);transition:color .18s;position:relative}
+nav.links a::after{content:"";position:absolute;left:0;right:100%;bottom:-4px;height:1px;background:var(--paper);transition:right .25s var(--ease)}
+nav.links a:hover{color:var(--paper)}
+nav.links a:hover::after{right:0}
+@media (max-width:760px){nav.links{display:none}}
 
-  .btn{
-    display:inline-flex;align-items:center;gap:9px;
-    font-family:"IBM Plex Mono",ui-monospace,monospace;
-    font-size:var(--step-0);font-weight:500;letter-spacing:0.04em;
-    text-decoration:none;white-space:nowrap;
-    padding:11px 20px;border-radius:8px;
-    background:var(--paper);color:var(--ink);
-    border:1px solid var(--paper);
-    transition:transform .15s ease, background .15s ease;
-  }
-  .btn:hover{transform:translateY(-1px);background:#e9e9ec}
-  .btn.ghost{background:transparent;color:var(--paper);border-color:var(--edge-2)}
-  .btn.ghost:hover{background:var(--raise-2);border-color:var(--fog-dim)}
-  .btn.sm{padding:8px 15px}
-  .bar .btn{margin-left:22px}
-  @media (max-width:720px){.bar .btn{margin-left:auto}}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:var(--s0);font-weight:500;letter-spacing:.03em;
+  white-space:nowrap;padding:11px 20px;border-radius:8px;
+  background:var(--paper);color:var(--ink);border:1px solid var(--paper);
+  transition:transform .18s var(--ease),background .18s,box-shadow .25s;
+  will-change:transform;
+}
+.btn:hover{transform:translateY(-2px);background:#ededf0;box-shadow:0 12px 30px -12px rgba(255,255,255,.35)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background:transparent;color:var(--paper);border-color:var(--edge-2)}
+.btn.ghost:hover{background:var(--raise-2);border-color:var(--fog);box-shadow:none}
+.btn.sm{padding:8px 15px}
+.bar .btn{margin-left:8px}
 
-  /* ── hero ── */
-  .hero{padding:88px 0 64px;border-bottom:1px solid var(--edge)}
-  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:64px;align-items:center}
-  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:44px}}
-  .hero h1{font-size:var(--step-5);font-weight:800;margin:20px 0 22px}
-  .lede{font-size:1.1875rem;line-height:1.55;color:#cfcfd2;max-width:34ch}
-  .cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:34px}
-  .cta-meta{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.75rem;color:var(--fog);margin-top:16px;letter-spacing:0.03em}
+/* ── reveal system (progressive: visible without JS / reduced-motion) ── */
+.js .reveal{opacity:0;transform:translateY(26px);filter:blur(6px);transition:opacity .7s var(--ease),transform .7s var(--ease),filter .7s var(--ease)}
+.js .reveal.in{opacity:1;transform:none;filter:none}
+.js .reveal.d1{transition-delay:.06s}.js .reveal.d2{transition-delay:.12s}.js .reveal.d3{transition-delay:.18s}
+.js .reveal.d4{transition-delay:.24s}.js .reveal.d5{transition-delay:.3s}
 
-  .ring-mark{width:100%;max-width:132px;height:auto;display:block;margin-bottom:6px}
-  .ring-mark circle{
-    fill:none;stroke:var(--paper);stroke-width:12;stroke-linecap:round;
-    stroke-dasharray:290;stroke-dashoffset:290;
-    transform:rotate(-84deg);transform-origin:50% 50%;
-    animation:draw 1.15s cubic-bezier(.2,.7,.2,1) .15s forwards;
-  }
-  @keyframes draw{to{stroke-dashoffset:26}}
-  @media (prefers-reduced-motion:reduce){.ring-mark circle{animation:none;stroke-dashoffset:26}}
+/* headings wipe in */
+.js .wipe{clip-path:inset(0 100% 0 0);transition:clip-path .9s var(--ease)}
+.js .wipe.in{clip-path:inset(0 0 0 0)}
 
-  /* ── app window mock ── */
-  .mock{
-    border:1px solid var(--edge-2);border-radius:12px;overflow:hidden;
-    background:var(--ink);
-    box-shadow:0 40px 80px -40px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.02);
-  }
-  .mock-title{display:flex;align-items:center;gap:9px;height:38px;padding:0 14px;border-bottom:1px solid var(--edge)}
-  .mock-title svg{width:14px;height:14px}
-  .mock-title .wm{font-family:"Archivo";font-weight:700;font-size:0.7rem;letter-spacing:0.2em;color:#d6d6d8}
-  .mock-title .ctl{margin-left:auto;display:flex;gap:16px;color:var(--fog-dim)}
-  .mock-title .ctl span{font-size:0.7rem}
-  .mock-body{display:grid;grid-template-columns:126px 1fr;min-height:270px}
-  .mock-nav{border-right:1px solid var(--edge);padding:12px 0;font-size:0.72rem;color:var(--fog)}
-  .mock-nav div{padding:6px 16px;display:flex;gap:8px;align-items:center}
-  .mock-nav div.on{color:var(--paper);box-shadow:inset 2px 0 0 var(--paper)}
-  .mock-nav .sep{height:1px;background:var(--edge);margin:8px 12px;padding:0}
-  .mock-main{padding:18px 18px 20px}
-  .mock-main .eyebrow{font-size:0.6rem}
-  .mock-main h4{font-family:"Archivo";font-weight:700;font-size:1.05rem;margin:6px 0 14px;letter-spacing:-0.01em}
-  .row{
-    border:1px solid var(--edge);border-radius:9px;background:var(--raise);
-    padding:11px 13px;display:flex;align-items:center;gap:12px;margin-bottom:9px;
-  }
-  .row .t{font-size:0.78rem;font-weight:500;line-height:1.3}
-  .row .chips{display:flex;gap:7px;margin-top:5px}
-  .chip{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.56rem;letter-spacing:0.06em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 5px}
-  .chip.amber{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,var(--edge-2))}
-  .sw{margin-left:auto;flex:none;width:34px;height:19px;border-radius:99px;border:1px solid var(--edge-2);position:relative;background:var(--raise-2)}
-  .sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:var(--fog-dim)}
-  .sw.on{background:var(--paper);border-color:var(--paper)}
-  .sw.on::after{left:auto;right:2px;background:var(--ink)}
+/* ── hero ── */
+.hero{position:relative;padding:150px 0 90px;overflow:hidden}
+.hero-bgring{
+  position:absolute;top:50%;left:50%;width:min(120vw,1400px);aspect-ratio:1;
+  transform:translate(-50%,-50%);pointer-events:none;opacity:.5;
+}
+.hero-bgring svg{width:100%;height:100%;overflow:visible}
+.hero-bgring circle{fill:none;stroke:var(--raise-3);stroke-width:1.2}
+.hero-bgring circle:nth-child(2){stroke:var(--edge);stroke-dasharray:2 10}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.02fr .98fr;gap:60px;align-items:center}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr;gap:44px}}
+.mark{width:118px;height:118px;margin-bottom:18px}
+.mark svg{width:100%;height:100%;overflow:visible}
+.mark circle{fill:none;stroke:var(--paper);stroke-width:11;stroke-linecap:round;stroke-dasharray:214;stroke-dashoffset:214;transform:rotate(-88deg);transform-origin:50% 50%;animation:draw 1.2s var(--ease) .1s forwards}
+@keyframes draw{to{stroke-dashoffset:20}}
+.hero h1{font-size:var(--s5);font-weight:900;margin:16px 0 22px}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:block;transform:translateY(105%);animation:rise .9s var(--ease) forwards}
+.hero h1 .line:nth-child(2) span{animation-delay:.09s}
+@keyframes rise{to{transform:none}}
+.lede{font-size:1.175rem;line-height:1.55;color:#d0d0d3;max-width:36ch;animation:fadeUp .8s var(--ease) .4s both}
+.cta-row{display:flex;flex-wrap:wrap;gap:13px;align-items:center;margin-top:32px;animation:fadeUp .8s var(--ease) .5s both}
+.cta-meta{margin-top:15px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.74rem;color:var(--fog);letter-spacing:.02em;animation:fadeUp .8s var(--ease) .58s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
-  /* ── stats ── */
-  .stats{border-bottom:1px solid var(--edge)}
-  .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-  @media (max-width:760px){.stats .wrap{grid-template-columns:repeat(2,1fr)}}
-  .stat{padding:36px 24px 34px;border-right:1px solid var(--edge)}
-  .stat:first-child{padding-left:0}
-  .stat:nth-child(4){border-right:0}
-  @media (max-width:760px){
-    .stat{border-right:0;border-bottom:1px solid var(--edge);padding-left:0}
-    .stat:nth-child(2n){padding-left:24px}
-    .stat:nth-child(3),.stat:nth-child(4){border-bottom:0}
-  }
-  .stat b{font-family:"Archivo";font-weight:800;font-size:2.4rem;letter-spacing:-0.03em;display:block;font-variant-numeric:tabular-nums}
-  .stat span{color:var(--fog);font-size:0.8125rem;display:block;margin-top:6px;max-width:22ch}
+/* app mock */
+.mock{
+  border:1px solid var(--edge-2);border-radius:13px;overflow:hidden;background:var(--ink);
+  box-shadow:0 50px 100px -50px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.02);
+  animation:fadeUp 1s var(--ease) .3s both;will-change:transform;
+}
+.mock-title{display:flex;align-items:center;gap:9px;height:38px;padding:0 14px;border-bottom:1px solid var(--edge)}
+.mock-title .mr{width:13px;height:13px;flex:none}
+.mock-title .mr svg{width:100%;height:100%}
+.mock-title .wm{font-family:"Archivo";font-weight:800;font-size:.66rem;letter-spacing:.22em;color:#d3d3d6}
+.mock-title .ctl{margin-left:auto;display:flex;gap:15px;color:var(--fog-dim);font-size:.7rem}
+.mock-body{display:grid;grid-template-columns:120px 1fr;min-height:264px}
+.mock-nav{border-right:1px solid var(--edge);padding:12px 0;font-size:.7rem;color:var(--fog)}
+.mock-nav div{padding:6px 15px}
+.mock-nav div.on{color:var(--paper);box-shadow:inset 2px 0 0 var(--paper)}
+.mock-nav .sep{height:1px;background:var(--edge);margin:8px 12px;padding:0}
+.mock-main{padding:17px 17px 20px}
+.mock-main h4{font-family:"Archivo";font-weight:800;font-size:1rem;margin:5px 0 13px}
+.mrow{border:1px solid var(--edge);border-radius:9px;background:var(--raise);padding:10px 12px;display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.mrow .mt{font-size:.76rem;font-weight:500;line-height:1.3}
+.mrow .mc{display:flex;gap:6px;margin-top:5px}
+.mchip{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.54rem;letter-spacing:.05em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 5px}
+.mchip.a{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 42%,var(--edge-2))}
+.msw{margin-left:auto;flex:none;width:33px;height:18px;border-radius:99px;border:1px solid var(--edge-2);position:relative;background:var(--raise-2)}
+.msw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--fog-dim);transition:left .3s var(--ease),background .3s}
+.msw.on{background:var(--paper);border-color:var(--paper)}
+.msw.on::after{left:17px;background:var(--ink)}
 
-  /* ── sections ── */
-  section.block{padding:80px 0;border-bottom:1px solid var(--edge)}
-  .block h2{font-size:var(--step-3);font-weight:700;margin:12px 0 0}
-  .block .intro{color:var(--fog);margin-top:14px;max-width:52ch}
+/* ── ticker ── */
+.ticker{border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);padding:16px 0;overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker-track{display:inline-flex;gap:44px;animation:marq 42s linear infinite;will-change:transform}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker span{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.8rem;color:var(--fog);letter-spacing:.02em}
+.ticker span::before{content:"○";margin-right:14px;color:var(--fog-dim)}
+@keyframes marq{to{transform:translateX(-50%)}}
 
-  .cats{margin-top:52px;display:flex;flex-direction:column}
-  .cat{display:grid;grid-template-columns:200px 1fr;gap:40px;padding:30px 0;border-top:1px solid var(--edge)}
-  .cat:last-child{border-bottom:1px solid var(--edge)}
-  @media (max-width:760px){.cat{grid-template-columns:1fr;gap:16px}}
-  .cat h3{font-size:1.375rem;font-weight:700;display:flex;align-items:baseline;gap:12px}
-  .cat h3 i{font-family:"IBM Plex Mono",ui-monospace,monospace;font-style:normal;font-size:0.75rem;color:var(--fog-dim)}
-  .cat .cd{color:var(--fog);font-size:0.9rem;margin-top:8px;max-width:30ch}
-  .cat ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-  .cat li{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:0.9375rem}
-  .cat li .tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.625rem;letter-spacing:0.06em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 6px}
-  .cat li .tag.amber{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,var(--edge-2))}
-  .cat li .tag.red{color:var(--red);border-color:color-mix(in srgb,var(--red) 40%,var(--edge-2))}
+/* ── stats ── */
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--edge)}
+@media (max-width:820px){.stats .wrap{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:44px 26px 42px;border-right:1px solid var(--edge)}
+.stat:first-child{padding-left:0}
+.stat:last-child{border-right:0}
+@media (max-width:820px){
+  .stat{border-right:0;border-bottom:1px solid var(--edge);padding-left:0}
+  .stat:nth-child(2n){padding-left:26px;border-right:0}
+  .stat:nth-child(3),.stat:nth-child(4){border-bottom:0}
+}
+.stat b{font-family:"Archivo";font-weight:900;font-size:2.6rem;letter-spacing:-.03em;display:block;font-variant-numeric:tabular-nums}
+.stat span{color:var(--fog);font-size:.8125rem;display:block;margin-top:7px;max-width:24ch}
 
-  .safety{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-  @media (max-width:760px){.safety{grid-template-columns:1fr}}
-  .safety .s{border:1px solid var(--edge);border-radius:10px;padding:24px;background:var(--raise)}
-  .safety .s .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.7rem;color:var(--fog-dim);letter-spacing:0.1em}
-  .safety .s h3{font-size:1.0625rem;font-weight:700;margin:12px 0 8px}
-  .safety .s p{color:var(--fog);font-size:0.875rem}
+/* ── generic block ── */
+section.block{padding:96px 0;border-bottom:1px solid var(--edge)}
+.block h2{font-size:var(--s3);font-weight:800;margin:14px 0 0}
+.block .intro{color:var(--fog);margin-top:14px;max-width:54ch}
 
-  .facts{margin-top:44px;display:flex;flex-direction:column;gap:0}
-  .fact{display:grid;grid-template-columns:180px 1fr;gap:28px;padding:16px 0;border-top:1px solid var(--edge);font-size:0.9375rem}
-  .fact:last-child{border-bottom:1px solid var(--edge)}
-  .fact dt{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.75rem;color:var(--fog);letter-spacing:0.04em;padding-top:2px}
-  .fact dd{margin:0;color:#d7d7da}
-  @media (max-width:640px){.fact{grid-template-columns:1fr;gap:4px}}
-  .warn{border:1px solid color-mix(in srgb,var(--amber) 35%,var(--edge-2));border-radius:10px;background:color-mix(in srgb,var(--amber) 6%,var(--raise));padding:20px 22px;margin-top:36px;font-size:0.9rem;color:#e4e4e6}
-  .warn b{color:var(--amber);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.1em;display:block;margin-bottom:8px}
+/* ── categories : horizontal scroll gallery ── */
+#gallery{position:relative;border-bottom:1px solid var(--edge)}
+#gallery .gintro{padding:96px 0 40px}
+.gtrack-outer{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
+.gtrack{display:flex;gap:26px;padding:0 28px;will-change:transform}
+.gcard{
+  flex:0 0 min(78vw,440px);min-height:min(66vh,520px);
+  border:1px solid var(--edge-2);border-radius:16px;background:linear-gradient(180deg,var(--raise-2),var(--raise));
+  padding:34px 32px;display:flex;flex-direction:column;
+}
+.gcard .gnum{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;color:var(--fog-dim);letter-spacing:.1em}
+.gcard h3{font-size:2rem;font-weight:800;margin:14px 0 6px}
+.gcard .gd{color:var(--fog);font-size:.92rem;max-width:34ch}
+.gcard ul{list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:13px}
+.gcard li{display:flex;flex-wrap:wrap;gap:9px;align-items:center;font-size:.92rem;padding-bottom:13px;border-bottom:1px solid var(--edge)}
+.gcard li:last-child{border-bottom:0}
+.tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.06em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 6px}
+.tag.a{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 42%,var(--edge-2))}
+.tag.r{color:var(--red);border-color:color-mix(in srgb,var(--red) 42%,var(--edge-2))}
+.ghint{position:absolute;bottom:34px;left:0;right:0;text-align:center;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.14em;color:var(--fog-dim);text-transform:uppercase}
+/* no-JS / reduced-motion fallback : plain vertical stack */
+.no-anim #gallery .gtrack-outer,
+#gallery.stacked .gtrack-outer{position:static;height:auto;display:block;overflow:visible}
+.no-anim #gallery .gtrack,
+#gallery.stacked .gtrack{flex-direction:column;transform:none!important;padding:0 28px 40px}
+.no-anim #gallery .gcard,
+#gallery.stacked .gcard{flex:none;min-height:0}
+.no-anim #gallery .ghint,
+#gallery.stacked .ghint{display:none}
+@media (max-width:760px){
+  #gallery{height:auto!important}
+  #gallery .gtrack-outer{position:static;height:auto;display:block;overflow:visible}
+  #gallery .gtrack{flex-direction:column;transform:none!important;padding:0 28px 40px}
+  #gallery .gcard{flex:none;min-height:0}
+  #gallery .ghint{display:none}
+  .gcard{flex-basis:auto}
+}
 
-  /* ── final CTA ── */
-  .get{padding:96px 0;text-align:left;border-bottom:1px solid var(--edge)}
-  .get h2{font-size:var(--step-4);font-weight:800}
-  .get p{color:var(--fog);margin:16px 0 34px;max-width:40ch}
-  .get .cta-row{margin-top:0}
+/* ── safety ── */
+.safety{margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media (max-width:820px){.safety{grid-template-columns:1fr}}
+.scard{border:1px solid var(--edge);border-radius:12px;padding:26px;background:var(--raise);transition:border-color .3s,transform .3s var(--ease)}
+.scard:hover{border-color:var(--edge-2);transform:translateY(-3px)}
+.scard .n{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;color:var(--fog-dim);letter-spacing:.1em}
+.scard h3{font-size:1.05rem;font-weight:700;margin:12px 0 9px}
+.scard p{color:var(--fog);font-size:.875rem}
 
-  footer{padding:44px 0 60px;color:var(--fog-dim);font-size:0.75rem;line-height:1.8}
-  footer .wrap{display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between}
-  footer .mono{color:var(--fog)}
-  footer .disc{max-width:52ch}
+/* ── facts ── */
+.facts{margin-top:46px}
+.fact{display:grid;grid-template-columns:190px 1fr;gap:28px;padding:17px 0;border-top:1px solid var(--edge);font-size:.9375rem}
+.fact:last-child{border-bottom:1px solid var(--edge)}
+.fact dt{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;color:var(--fog);letter-spacing:.04em;padding-top:2px}
+.fact dd{margin:0;color:#d6d6d9}
+@media (max-width:620px){.fact{grid-template-columns:1fr;gap:4px}}
+.warn{border:1px solid color-mix(in srgb,var(--amber) 34%,var(--edge-2));border-radius:12px;background:color-mix(in srgb,var(--amber) 6%,var(--raise));padding:22px 24px;margin-top:38px;font-size:.9rem;color:#e6e6e8}
+.warn b{color:var(--amber);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;letter-spacing:.1em;display:block;margin-bottom:8px}
+
+/* ── final ── */
+.get{padding:120px 0;position:relative;overflow:hidden;border-bottom:1px solid var(--edge)}
+.get .closering{position:absolute;right:-140px;top:50%;transform:translateY(-50%);width:420px;height:420px;pointer-events:none;opacity:.4}
+.get .closering svg{width:100%;height:100%;overflow:visible}
+.get .closering circle{fill:none;stroke:var(--edge-2);stroke-width:2;stroke-dasharray:264;stroke-dashoffset:264;transform:rotate(-90deg);transform-origin:50% 50%}
+.get h2{font-size:var(--s4);font-weight:900;position:relative}
+.get p{color:var(--fog);margin:16px 0 34px;max-width:42ch;position:relative}
+
+footer{padding:46px 0 64px;color:var(--fog-dim);font-size:.75rem;line-height:1.8}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between}
+footer .disc{max-width:56ch}
+footer .mono{color:var(--fog)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0ms!important;transition-duration:.001ms!important}
+  .hero h1 .line span{transform:none}
+  .mark circle{stroke-dashoffset:20}
+}
 </style>
+</head>
+<body>
+<div id="progress"></div>
 
-<header>
+<header id="site-header">
   <div class="wrap bar">
-    <span class="brand">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round"/></svg>
+    <a class="brand" href="#top" aria-label="Ownly home">
+      <span class="ringwrap">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="track" cx="50" cy="50" r="34" fill="none" stroke-width="12"/>
+          <circle class="fill" id="hdr-fill" cx="50" cy="50" r="34" fill="none" stroke-width="12" stroke-linecap="round"/>
+        </svg>
+      </span>
       OWNLY
-    </span>
+    </a>
     <nav class="links">
-      <a href="#changes">What it changes</a>
+      <a href="#gallery">What it changes</a>
       <a href="#safety">Safety</a>
       <a href="#install">Before you install</a>
     </nav>
@@ -209,14 +294,20 @@
   </div>
 </header>
 
-<main>
+<main id="top">
   <section class="hero">
+    <div class="hero-bgring" data-parallax="0.06" aria-hidden="true">
+      <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96"/><circle cx="100" cy="100" r="72"/></svg>
+    </div>
     <div class="wrap hero-grid">
       <div>
-        <svg class="ring-mark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="34"/></svg>
-        <p class="eyebrow">Free &nbsp;·&nbsp; Windows 10 &amp; 11 &nbsp;·&nbsp; No account</p>
-        <h1>Windows, your way.</h1>
-        <p class="lede">Ownly strips the noise out of Windows&nbsp;10 and&nbsp;11 &mdash; ads, telemetry, background clutter, forced features &mdash; and writes down every change so you can undo any of it.</p>
+        <div class="mark" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34"/></svg></div>
+        <p class="eyebrow">Free · Windows 10 &amp; 11 · No account</p>
+        <h1>
+          <span class="line"><span>Windows,</span></span>
+          <span class="line"><span>your way.</span></span>
+        </h1>
+        <p class="lede">Ownly strips the noise out of Windows 10 and 11 — ads, telemetry, background clutter, forced features — and writes down every change so you can undo any of it.</p>
         <div class="cta-row">
           <a class="btn" href="https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe">
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -224,143 +315,136 @@
           </a>
           <a class="btn ghost" href="https://github.com/OwnlyTeam/Ownly">View the source</a>
         </div>
-        <p class="cta-meta">Ownly 0.0.1 &nbsp;·&nbsp; Preview build &nbsp;·&nbsp; 64-bit (x64) &nbsp;·&nbsp; single file, no installer</p>
+        <p class="cta-meta">Ownly 0.0.1 · Preview build · 64-bit (x64) · single file, no installer</p>
       </div>
 
-      <div class="mock" aria-hidden="true">
+      <div class="mock" data-parallax="-0.05" aria-hidden="true">
         <div class="mock-title">
-          <svg viewBox="0 0 100 100"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#d6d6d8" stroke-width="13" stroke-linecap="round"/></svg>
+          <span class="mr"><svg viewBox="0 0 100 100"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#d3d3d6" stroke-width="13" stroke-linecap="round"/></svg></span>
           <span class="wm">OWNLY</span>
-          <span class="ctl"><span>&minus;</span><span>&#9633;</span><span>&times;</span></span>
+          <span class="ctl">&minus;&nbsp;&nbsp;&#9633;&nbsp;&nbsp;&times;</span>
         </div>
         <div class="mock-body">
           <div class="mock-nav">
-            <div>Overview</div>
-            <div>Clean</div>
-            <div>Customize</div>
-            <div>Optimize</div>
-            <div class="on">Privacy</div>
-            <div>Tools</div>
-            <div class="sep"></div>
-            <div>Changes</div>
-            <div>Activity</div>
+            <div>Overview</div><div>Clean</div><div>Customize</div><div>Optimize</div>
+            <div class="on">Privacy</div><div>Tools</div>
+            <div class="sep"></div><div>Changes</div><div>Activity</div>
           </div>
           <div class="mock-main">
-            <p class="eyebrow">Privacy</p>
+            <p class="eyebrow" style="font-size:.58rem">Privacy</p>
             <h4>Your privacy.</h4>
-            <div class="row">
-              <div>
-                <div class="t">Set diagnostic data to the minimum</div>
-                <div class="chips"><span class="chip amber">MODERATE RISK</span><span class="chip">NEEDS ADMIN</span></div>
-              </div>
-              <span class="sw on"></span>
-            </div>
-            <div class="row">
-              <div>
-                <div class="t">Turn off online speech recognition</div>
-                <div class="chips"><span class="chip">LOW RISK</span></div>
-              </div>
-              <span class="sw"></span>
-            </div>
-            <div class="row">
-              <div>
-                <div class="t">Stop tracking which apps you open</div>
-                <div class="chips"><span class="chip">LOW RISK</span></div>
-              </div>
-              <span class="sw on"></span>
-            </div>
+            <div class="mrow"><div><div class="mt">Set diagnostic data to the minimum</div><div class="mc"><span class="mchip a">MODERATE RISK</span><span class="mchip">NEEDS ADMIN</span></div></div><span class="msw on"></span></div>
+            <div class="mrow"><div><div class="mt">Turn off online speech recognition</div><div class="mc"><span class="mchip">LOW RISK</span></div></div><span class="msw"></span></div>
+            <div class="mrow"><div><div class="mt">Stop tracking which apps you open</div><div class="mc"><span class="mchip">LOW RISK</span></div></div><span class="msw on"></span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="ticker">
+      <span>Remove web results from Start</span><span>Classic right-click menu</span><span>Disable Copilot</span><span>Left-align the taskbar</span><span>Turn off Fast Startup</span><span>Minimum diagnostic data</span><span>Disable the telemetry service</span><span>Flush the DNS cache</span><span>Seconds in the clock</span><span>Deny camera &amp; mic to apps</span><span>Create a restore point</span><span>Run SFC &amp; DISM</span>
+    </div>
+  </div>
 
   <section class="stats">
     <div class="wrap">
-      <div class="stat"><b>40+</b><span>reversible Windows tweaks, grouped by what they touch</span></div>
-      <div class="stat"><b>1</b><span>click in the Changes list to undo any of them</span></div>
-      <div class="stat"><b>0</b><span>telemetry, accounts, or background services of its own</span></div>
-      <div class="stat"><b>100%</b><span>local &mdash; every action is logged with the exact command it ran</span></div>
+      <div class="stat reveal"><b data-count="40" data-suffix="+">0</b><span>reversible Windows tweaks, grouped by what they touch</span></div>
+      <div class="stat reveal d1"><b data-count="1">0</b><span>click in the Changes list to undo any of them</span></div>
+      <div class="stat reveal d2"><b data-count="0">0</b><span>telemetry, accounts, or background services of its own</span></div>
+      <div class="stat reveal d3"><b data-count="100" data-suffix="%">0</b><span>local — every action logged with the exact command it ran</span></div>
     </div>
   </section>
 
-  <section class="block" id="changes">
-    <div class="wrap">
-      <p class="eyebrow">What it changes</p>
-      <h2>Five places Windows gets in your way.</h2>
-      <p class="intro">Every option explains itself before it runs, carries a risk label, and &mdash; where Windows allows it &mdash; can be switched straight back.</p>
-
-      <div class="cats">
-        <div class="cat">
-          <div><h3>Clean <i>&mdash; noise</i></h3><p class="cd">Cut the ads, suggestions and background clutter.</p></div>
+  <section id="gallery">
+    <div class="wrap gintro">
+      <p class="eyebrow reveal">What it changes</p>
+      <h2 class="wipe" style="font-size:var(--s3);font-weight:800;margin-top:14px">Five places Windows gets in your way.</h2>
+      <p class="intro reveal d1">Scroll — each area explains itself before it runs, carries a risk label, and where Windows allows it, switches straight back.</p>
+    </div>
+    <div class="gtrack-outer">
+      <div class="gtrack" id="gtrack">
+        <article class="gcard">
+          <span class="gnum">01 / CLEAN</span>
+          <h3>Cut the noise</h3>
+          <p class="gd">Ads, suggestions and background clutter, gone.</p>
           <ul>
             <li>Remove web results from Start search <span class="tag">LOW</span></li>
-            <li>Turn off Windows Copilot <span class="tag amber">MODERATE</span></li>
+            <li>Turn off Windows Copilot <span class="tag a">MODERATE</span></li>
             <li>Stop auto-installing suggested apps <span class="tag">NEEDS ADMIN</span></li>
-            <li>Scan for temp files, startup items and optional apps</li>
+            <li>Scan for temp files, startup items &amp; optional apps</li>
           </ul>
-        </div>
-        <div class="cat">
-          <div><h3>Customize <i>&mdash; feel</i></h3><p class="cd">Make the desktop behave the way you expect.</p></div>
+        </article>
+        <article class="gcard">
+          <span class="gnum">02 / CUSTOMIZE</span>
+          <h3>Make it feel right</h3>
+          <p class="gd">The desktop behaves the way you expect it to.</p>
           <ul>
             <li>Classic right-click menu <span class="tag">LOW</span></li>
-            <li>Left-align the taskbar &middot; show file extensions <span class="tag">LOW</span></li>
-            <li>Seconds in the clock &middot; "End task" on the taskbar <span class="tag">LOW</span></li>
-            <li>This PC and Recycle Bin back on the desktop <span class="tag">LOW</span></li>
+            <li>Left-align taskbar · show file extensions <span class="tag">LOW</span></li>
+            <li>Seconds in the clock · "End task" on the taskbar <span class="tag">LOW</span></li>
+            <li>This PC &amp; Recycle Bin back on the desktop <span class="tag">LOW</span></li>
           </ul>
-        </div>
-        <div class="cat">
-          <div><h3>Optimize <i>&mdash; speed</i></h3><p class="cd">Trim the things that cost you responsiveness.</p></div>
+        </article>
+        <article class="gcard">
+          <span class="gnum">03 / OPTIMIZE</span>
+          <h3>Trim the drag</h3>
+          <p class="gd">The things that quietly cost you responsiveness.</p>
           <ul>
-            <li>Best-performance visual effects &middot; Game Mode <span class="tag">LOW</span></li>
-            <li>Remove the menu-open and startup-app delays <span class="tag">LOW</span></li>
-            <li>Turn off Fast Startup &middot; disable hibernation <span class="tag amber">MODERATE</span></li>
-            <li>Power modes &middot; startup manager &middot; disable the telemetry service <span class="tag amber">MODERATE</span></li>
+            <li>Best-performance visual effects · Game Mode <span class="tag">LOW</span></li>
+            <li>Remove menu-open &amp; startup-app delays <span class="tag">LOW</span></li>
+            <li>Turn off Fast Startup · disable hibernation <span class="tag a">MODERATE</span></li>
+            <li>Power modes · startup manager · kill the telemetry service <span class="tag a">MODERATE</span></li>
           </ul>
-        </div>
-        <div class="cat">
-          <div><h3>Privacy <i>&mdash; data</i></h3><p class="cd">Close the taps Windows leaves running.</p></div>
+        </article>
+        <article class="gcard">
+          <span class="gnum">04 / PRIVACY</span>
+          <h3>Close the taps</h3>
+          <p class="gd">The data Windows collects by default.</p>
           <ul>
             <li>Set diagnostic data to the minimum <span class="tag">NEEDS ADMIN</span></li>
-            <li>Limit the advertising ID, activity history and cloud search <span class="tag">LOW</span></li>
-            <li>Turn off online speech recognition and typing collection <span class="tag">LOW</span></li>
-            <li>Deny camera, microphone and location to apps <span class="tag amber">MODERATE</span></li>
+            <li>Limit advertising ID, activity history &amp; cloud search <span class="tag">LOW</span></li>
+            <li>Turn off online speech &amp; typing collection <span class="tag">LOW</span></li>
+            <li>Deny camera, mic &amp; location to apps <span class="tag a">MODERATE</span></li>
           </ul>
-        </div>
-        <div class="cat">
-          <div><h3>Tools <i>&mdash; fix</i></h3><p class="cd">The maintenance jobs you'd otherwise google.</p></div>
+        </article>
+        <article class="gcard">
+          <span class="gnum">05 / TOOLS</span>
+          <h3>Fix the rest</h3>
+          <p class="gd">The maintenance jobs you'd otherwise google.</p>
           <ul>
-            <li>Flush the DNS cache &middot; restart Explorer <span class="tag">LOW</span></li>
-            <li>Clear the Windows Update cache <span class="tag amber">MODERATE</span></li>
-            <li>Create a system restore point <span class="tag amber">MODERATE</span></li>
-            <li>Run SFC and DISM to repair Windows <span class="tag amber">MODERATE</span></li>
+            <li>Flush the DNS cache · restart Explorer <span class="tag">LOW</span></li>
+            <li>Clear the Windows Update cache <span class="tag a">MODERATE</span></li>
+            <li>Create a system restore point <span class="tag a">MODERATE</span></li>
+            <li>Run SFC &amp; DISM to repair Windows <span class="tag a">MODERATE</span></li>
           </ul>
-        </div>
+        </article>
       </div>
+      <div class="ghint">Keep scrolling</div>
     </div>
   </section>
 
   <section class="block" id="safety">
     <div class="wrap">
-      <p class="eyebrow">Safety</p>
-      <h2>Nothing happens behind your back.</h2>
-      <p class="intro">Ownly is built so that any single change can be found, understood, and taken back.</p>
-
+      <p class="eyebrow reveal">Safety</p>
+      <h2 class="wipe">Nothing happens behind your back.</h2>
+      <p class="intro reveal d1">Any single change can be found, understood, and taken back.</p>
       <div class="safety">
-        <div class="s">
+        <div class="scard reveal d1">
           <div class="n">FIRST RUN</div>
           <h3>It reads you the terms</h3>
-          <p>A full disclaimer you have to scroll through and accept before the app will open. Anything you do is on you &mdash; and it says so, in plain language.</p>
+          <p>A full disclaimer you scroll through and accept before the app opens. Anything you do is on you — and it says so, in plain language.</p>
         </div>
-        <div class="s">
+        <div class="scard reveal d2">
           <div class="n">EVERY CHANGE</div>
           <h3>Lands in the Changes list</h3>
-          <p>User-level settings apply instantly. Machine-level ones ask for a Windows permission prompt. Both show up with a one-click <span class="mono">Restore</span>.</p>
+          <p>User-level settings apply instantly. Machine-level ones ask for a Windows permission prompt. Both get a one-click <span class="mono">Restore</span>.</p>
         </div>
-        <div class="s">
+        <div class="scard reveal d3">
           <div class="n">ALWAYS</div>
           <h3>The Activity log shows the command</h3>
-          <p>Every action &mdash; and every undo &mdash; is written down with the exact registry write or command it ran, and whether it needed admin.</p>
+          <p>Every action — and every undo — is written down with the exact registry write or command, and whether it needed admin.</p>
         </div>
       </div>
     </div>
@@ -368,19 +452,17 @@
 
   <section class="block" id="install">
     <div class="wrap">
-      <p class="eyebrow">Before you install</p>
-      <h2>The honest bits.</h2>
-
+      <p class="eyebrow reveal">Before you install</p>
+      <h2 class="wipe">The honest bits.</h2>
       <dl class="facts">
-        <div class="fact"><dt>Works on</dt><dd>Windows 10 (build 1809 and later) and Windows 11, 64-bit (x64). Not for ARM or 32-bit.</dd></div>
-        <div class="fact"><dt>Install</dt><dd>None. It's a single <span class="mono">Ownly.exe</span> &mdash; put it anywhere and double-click. Delete the file to remove it.</dd></div>
-        <div class="fact"><dt>Size</dt><dd>About 470&nbsp;MB. Large because it bundles its own copy of everything it needs, so nothing else has to be installed.</dd></div>
-        <div class="fact"><dt>Account</dt><dd>No sign-up, no login, no connection required. It only writes small settings files on your own PC.</dd></div>
-        <div class="fact"><dt>Undoing changes</dt><dd>From the Changes tab. Machine-level undos ask for the Windows permission prompt again.</dd></div>
-        <div class="fact"><dt>Not Microsoft</dt><dd>Ownly is an independent project. It is not created by, affiliated with, or endorsed by Microsoft. "Windows" is a trademark of Microsoft Corporation.</dd></div>
+        <div class="fact reveal"><dt>Works on</dt><dd>Windows 10 (build 1809+) and Windows 11, 64-bit (x64). Not ARM or 32-bit.</dd></div>
+        <div class="fact reveal"><dt>Install</dt><dd>None. A single <span class="mono">Ownly.exe</span> — put it anywhere and double-click. Delete the file to remove it.</dd></div>
+        <div class="fact reveal"><dt>Size</dt><dd>About 470&nbsp;MB. Large because it bundles its own copy of everything it needs, so nothing else has to be installed.</dd></div>
+        <div class="fact reveal"><dt>Account</dt><dd>No sign-up, no login, no connection. It only writes small settings files on your own PC.</dd></div>
+        <div class="fact reveal"><dt>Undoing changes</dt><dd>From the Changes tab. Machine-level undos ask for the Windows permission prompt again.</dd></div>
+        <div class="fact reveal"><dt>Not Microsoft</dt><dd>An independent project. Not created by, affiliated with, or endorsed by Microsoft. "Windows" is a trademark of Microsoft Corporation.</dd></div>
       </dl>
-
-      <div class="warn">
+      <div class="warn reveal">
         <b>SMARTSCREEN</b>
         This preview build isn't code-signed yet, so Windows may show a blue "Windows protected your PC" box the first time you run it. Click <b>More info</b>, then <b>Run anyway</b>. Signing is on the list.
       </div>
@@ -388,11 +470,12 @@
   </section>
 
   <section class="get">
+    <div class="closering" aria-hidden="true"><svg viewBox="0 0 100 100"><circle id="close-c" cx="50" cy="50" r="42"/></svg></div>
     <div class="wrap">
-      <p class="eyebrow">Get it</p>
-      <h2>Take your PC back.</h2>
-      <p>Free, forever. No catch &mdash; it's a tool, not a product.</p>
-      <div class="cta-row">
+      <p class="eyebrow reveal">Get it</p>
+      <h2 class="wipe">Take your PC back.</h2>
+      <p class="reveal d1">Free, forever. No catch — it's a tool, not a product.</p>
+      <div class="cta-row reveal d2" style="animation:none;display:flex;flex-wrap:wrap;gap:13px">
         <a class="btn" href="https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Download Ownly 0.0.1
@@ -405,7 +488,123 @@
 
 <footer>
   <div class="wrap">
-    <span class="disc">Ownly is provided as-is, with no warranty. You are responsible for changes you make to your own system &mdash; see the full terms inside the app. Not affiliated with or endorsed by Microsoft Corporation.</span>
-    <span class="mono">OWNLY 0.0.1 &nbsp;·&nbsp; PREVIEW &nbsp;·&nbsp; 2026</span>
+    <span class="disc">Ownly is provided as-is, with no warranty. You are responsible for changes you make to your own system — see the full terms inside the app. Not affiliated with or endorsed by Microsoft Corporation.</span>
+    <span class="mono">OWNLY 0.0.1 · PREVIEW · 2026</span>
   </div>
 </footer>
+
+<script>
+(function(){
+  "use strict";
+  var root = document.documentElement;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  root.classList.add(reduce ? "no-anim" : "js");
+  if (reduce) {
+    // show everything, no motion
+    document.querySelectorAll(".reveal,.wipe").forEach(function(el){ el.classList.add("in"); });
+    return;
+  }
+
+  /* ---- reveal on enter ---- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){
+        e.target.classList.add("in");
+        if (e.target.dataset.count !== undefined) countUp(e.target);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.18, rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll(".reveal,.wipe,[data-count]").forEach(function(el){ io.observe(el); });
+
+  /* ---- number count-up ---- */
+  function countUp(el){
+    var target = parseFloat(el.dataset.count) || 0;
+    var suffix = el.dataset.suffix || "";
+    var dur = 1100, start = performance.now();
+    function tick(now){
+      var p = Math.min(1, (now - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* ---- ticker: duplicate content for a seamless loop ---- */
+  var tk = document.getElementById("ticker");
+  if (tk) tk.innerHTML += tk.innerHTML;
+
+  /* ---- scroll-driven: progress bar, header ring, parallax, horizontal gallery ---- */
+  var progress = document.getElementById("progress");
+  var hdrFill = document.getElementById("hdr-fill");
+  var header = document.getElementById("site-header");
+  var closeC = document.getElementById("close-c");
+  var parallax = [].slice.call(document.querySelectorAll("[data-parallax]"));
+  var gallery = document.getElementById("gallery");
+  var gtrack = document.getElementById("gtrack");
+  var HDR_LEN = 214, CLOSE_LEN = 264;
+  var ticking = false;
+
+  function onScroll(){
+    if (!ticking){ requestAnimationFrame(update); ticking = true; }
+  }
+  function update(){
+    ticking = false;
+    var y = window.scrollY || window.pageYOffset;
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    var p = docH > 0 ? y / docH : 0;
+
+    progress.style.transform = "scaleX(" + p.toFixed(4) + ")";
+    if (hdrFill) hdrFill.style.strokeDashoffset = (HDR_LEN * (1 - p)).toFixed(2);
+    header.classList.toggle("stuck", y > 8);
+
+    parallax.forEach(function(el){
+      var rate = parseFloat(el.dataset.parallax) || 0;
+      var mid = el.getBoundingClientRect().top + el.offsetHeight / 2 - window.innerHeight / 2;
+      el.style.transform = "translate3d(0," + (mid * rate).toFixed(1) + "px,0)";
+    });
+
+    /* horizontal gallery */
+    if (gallery && gtrack){
+      var gr = gallery.getBoundingClientRect();
+      var scrollable = gallery.offsetHeight - window.innerHeight;
+      var gp = Math.min(1, Math.max(0, -gr.top / scrollable));
+      var dist = gtrack.scrollWidth - window.innerWidth + 56;
+      gtrack.style.transform = "translate3d(-" + (gp * Math.max(0, dist)).toFixed(1) + "px,0,0)";
+      var hint = gallery.querySelector(".ghint");
+      if (hint) hint.style.opacity = gp > 0.92 ? 0 : 0.9;
+    }
+
+    if (closeC){
+      var cr = closeC.getBoundingClientRect();
+      var vis = 1 - Math.min(1, Math.max(0, (cr.top - window.innerHeight * 0.2) / (window.innerHeight * 0.7)));
+      closeC.style.strokeDashoffset = (CLOSE_LEN * (1 - vis)).toFixed(2);
+    }
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+
+  /* ---- set the horizontal section's height from its content ---- */
+  function sizeGallery(){
+    if (!gallery || !gtrack || window.innerWidth < 760) return;
+    var extra = gtrack.scrollWidth - window.innerWidth + 56;
+    gallery.style.height = (window.innerHeight + Math.max(0, extra) * 1.05) + "px";
+    update();
+  }
+  window.addEventListener("resize", sizeGallery);
+  sizeGallery();
+
+  /* ---- magnetic buttons ---- */
+  document.querySelectorAll(".btn").forEach(function(b){
+    b.addEventListener("pointermove", function(e){
+      var r = b.getBoundingClientRect();
+      b.style.transform = "translate(" + ((e.clientX - r.left - r.width/2) * 0.12).toFixed(1) + "px," + ((e.clientY - r.top - r.height/2) * 0.18 - 2).toFixed(1) + "px)";
+    });
+    b.addEventListener("pointerleave", function(){ b.style.transform = ""; });
+  });
+})();
+</script>
+</body>
+</html>
