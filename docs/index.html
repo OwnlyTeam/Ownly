@@ -193,43 +193,30 @@ section.block{padding:96px 0;border-bottom:1px solid var(--edge)}
 .block h2{font-size:var(--s3);font-weight:800;margin:14px 0 0}
 .block .intro{color:var(--fog);margin-top:14px;max-width:54ch}
 
-/* ── categories : horizontal scroll gallery ── */
-#gallery{position:relative;border-bottom:1px solid var(--edge)}
-#gallery .gintro{padding:96px 0 40px}
-.gtrack-outer{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
-.gtrack{display:flex;gap:26px;padding:0 28px;will-change:transform}
+/* ── categories : animated vertical stack ── */
+#gallery{border-bottom:1px solid var(--edge)}
+#gallery .gintro{padding:96px 0 44px}
+.gtrack-outer{padding-bottom:96px}
+.gtrack{display:flex;flex-direction:column;gap:20px;max-width:var(--maxw);margin:0 auto;padding:0 28px}
 .gcard{
-  flex:0 0 min(78vw,440px);min-height:min(66vh,520px);
-  border:1px solid var(--edge-2);border-radius:16px;background:linear-gradient(180deg,var(--raise-2),var(--raise));
-  padding:34px 32px;display:flex;flex-direction:column;
+  border:1px solid var(--edge-2);border-radius:16px;
+  background:linear-gradient(180deg,var(--raise-2),var(--raise));
+  padding:34px;display:grid;grid-template-columns:264px 1fr;gap:40px;
+  will-change:transform;transition:border-color .3s;
 }
-.gcard .gnum{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;color:var(--fog-dim);letter-spacing:.1em}
-.gcard h3{font-size:2rem;font-weight:800;margin:14px 0 6px}
-.gcard .gd{color:var(--fog);font-size:.92rem;max-width:34ch}
-.gcard ul{list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:13px}
-.gcard li{display:flex;flex-wrap:wrap;gap:9px;align-items:center;font-size:.92rem;padding-bottom:13px;border-bottom:1px solid var(--edge)}
-.gcard li:last-child{border-bottom:0}
-.tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.06em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 6px}
+.gcard:hover{border-color:var(--fog-dim)}
+@media (max-width:820px){.gcard{grid-template-columns:1fr;gap:14px;padding:26px}}
+.gcard .ghead{align-self:start}
+.gcard .gnum{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;color:var(--fog-dim);letter-spacing:.12em}
+.gcard h3{font-size:1.9rem;font-weight:800;margin:14px 0 8px}
+.gcard .gd{color:var(--fog);font-size:.9rem;max-width:26ch}
+.gcard ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.gcard li{display:flex;flex-wrap:wrap;gap:9px;align-items:center;font-size:.92rem;padding-bottom:12px;border-bottom:1px solid var(--edge)}
+.gcard li:last-child{border-bottom:0;padding-bottom:0}
+.tag{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6rem;letter-spacing:.06em;color:var(--fog);border:1px solid var(--edge-2);border-radius:4px;padding:2px 6px;white-space:nowrap}
 .tag.a{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 42%,var(--edge-2))}
 .tag.r{color:var(--red);border-color:color-mix(in srgb,var(--red) 42%,var(--edge-2))}
-.ghint{position:absolute;bottom:34px;left:0;right:0;text-align:center;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.68rem;letter-spacing:.14em;color:var(--fog-dim);text-transform:uppercase}
-/* no-JS / reduced-motion fallback : plain vertical stack */
-.no-anim #gallery .gtrack-outer,
-#gallery.stacked .gtrack-outer{position:static;height:auto;display:block;overflow:visible}
-.no-anim #gallery .gtrack,
-#gallery.stacked .gtrack{flex-direction:column;transform:none!important;padding:0 28px 40px}
-.no-anim #gallery .gcard,
-#gallery.stacked .gcard{flex:none;min-height:0}
-.no-anim #gallery .ghint,
-#gallery.stacked .ghint{display:none}
-@media (max-width:760px){
-  #gallery{height:auto!important}
-  #gallery .gtrack-outer{position:static;height:auto;display:block;overflow:visible}
-  #gallery .gtrack{flex-direction:column;transform:none!important;padding:0 28px 40px}
-  #gallery .gcard{flex:none;min-height:0}
-  #gallery .ghint{display:none}
-  .gcard{flex-basis:auto}
-}
+.ghint{display:none}
 
 /* ── safety ── */
 .safety{margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
@@ -365,10 +352,12 @@ footer .mono{color:var(--fog)}
     </div>
     <div class="gtrack-outer">
       <div class="gtrack" id="gtrack">
-        <article class="gcard">
-          <span class="gnum">01 / CLEAN</span>
-          <h3>Cut the noise</h3>
-          <p class="gd">Ads, suggestions and background clutter, gone.</p>
+        <article class="gcard reveal">
+          <div class="ghead">
+            <span class="gnum">01 / CLEAN</span>
+            <h3>Cut the noise</h3>
+            <p class="gd">Ads, suggestions and background clutter, gone.</p>
+          </div>
           <ul>
             <li>Remove web results from Start search <span class="tag">LOW</span></li>
             <li>Turn off Windows Copilot <span class="tag a">MODERATE</span></li>
@@ -376,10 +365,12 @@ footer .mono{color:var(--fog)}
             <li>Scan for temp files, startup items &amp; optional apps</li>
           </ul>
         </article>
-        <article class="gcard">
-          <span class="gnum">02 / CUSTOMIZE</span>
-          <h3>Make it feel right</h3>
-          <p class="gd">The desktop behaves the way you expect it to.</p>
+        <article class="gcard reveal">
+          <div class="ghead">
+            <span class="gnum">02 / CUSTOMIZE</span>
+            <h3>Make it feel right</h3>
+            <p class="gd">The desktop behaves the way you expect it to.</p>
+          </div>
           <ul>
             <li>Classic right-click menu <span class="tag">LOW</span></li>
             <li>Left-align taskbar · show file extensions <span class="tag">LOW</span></li>
@@ -387,10 +378,12 @@ footer .mono{color:var(--fog)}
             <li>This PC &amp; Recycle Bin back on the desktop <span class="tag">LOW</span></li>
           </ul>
         </article>
-        <article class="gcard">
-          <span class="gnum">03 / OPTIMIZE</span>
-          <h3>Trim the drag</h3>
-          <p class="gd">The things that quietly cost you responsiveness.</p>
+        <article class="gcard reveal">
+          <div class="ghead">
+            <span class="gnum">03 / OPTIMIZE</span>
+            <h3>Trim the drag</h3>
+            <p class="gd">The things that quietly cost you responsiveness.</p>
+          </div>
           <ul>
             <li>Best-performance visual effects · Game Mode <span class="tag">LOW</span></li>
             <li>Remove menu-open &amp; startup-app delays <span class="tag">LOW</span></li>
@@ -398,10 +391,12 @@ footer .mono{color:var(--fog)}
             <li>Power modes · startup manager · kill the telemetry service <span class="tag a">MODERATE</span></li>
           </ul>
         </article>
-        <article class="gcard">
-          <span class="gnum">04 / PRIVACY</span>
-          <h3>Close the taps</h3>
-          <p class="gd">The data Windows collects by default.</p>
+        <article class="gcard reveal">
+          <div class="ghead">
+            <span class="gnum">04 / PRIVACY</span>
+            <h3>Close the taps</h3>
+            <p class="gd">The data Windows collects by default.</p>
+          </div>
           <ul>
             <li>Set diagnostic data to the minimum <span class="tag">NEEDS ADMIN</span></li>
             <li>Limit advertising ID, activity history &amp; cloud search <span class="tag">LOW</span></li>
@@ -409,10 +404,12 @@ footer .mono{color:var(--fog)}
             <li>Deny camera, mic &amp; location to apps <span class="tag a">MODERATE</span></li>
           </ul>
         </article>
-        <article class="gcard">
-          <span class="gnum">05 / TOOLS</span>
-          <h3>Fix the rest</h3>
-          <p class="gd">The maintenance jobs you'd otherwise google.</p>
+        <article class="gcard reveal">
+          <div class="ghead">
+            <span class="gnum">05 / TOOLS</span>
+            <h3>Fix the rest</h3>
+            <p class="gd">The maintenance jobs you'd otherwise google.</p>
+          </div>
           <ul>
             <li>Flush the DNS cache · restart Explorer <span class="tag">LOW</span></li>
             <li>Clear the Windows Update cache <span class="tag a">MODERATE</span></li>
@@ -421,7 +418,6 @@ footer .mono{color:var(--fog)}
           </ul>
         </article>
       </div>
-      <div class="ghint">Keep scrolling</div>
     </div>
   </section>
 
@@ -535,14 +531,12 @@ footer .mono{color:var(--fog)}
   var tk = document.getElementById("ticker");
   if (tk) tk.innerHTML += tk.innerHTML;
 
-  /* ---- scroll-driven: progress bar, header ring, parallax, horizontal gallery ---- */
+  /* ---- scroll-driven: progress bar, header ring, parallax, card deck ---- */
   var progress = document.getElementById("progress");
   var hdrFill = document.getElementById("hdr-fill");
   var header = document.getElementById("site-header");
   var closeC = document.getElementById("close-c");
   var parallax = [].slice.call(document.querySelectorAll("[data-parallax]"));
-  var gallery = document.getElementById("gallery");
-  var gtrack = document.getElementById("gtrack");
   var HDR_LEN = 214, CLOSE_LEN = 264;
   var ticking = false;
 
@@ -565,17 +559,6 @@ footer .mono{color:var(--fog)}
       el.style.transform = "translate3d(0," + (mid * rate).toFixed(1) + "px,0)";
     });
 
-    /* horizontal gallery */
-    if (gallery && gtrack){
-      var gr = gallery.getBoundingClientRect();
-      var scrollable = gallery.offsetHeight - window.innerHeight;
-      var gp = Math.min(1, Math.max(0, -gr.top / scrollable));
-      var dist = gtrack.scrollWidth - window.innerWidth + 56;
-      gtrack.style.transform = "translate3d(-" + (gp * Math.max(0, dist)).toFixed(1) + "px,0,0)";
-      var hint = gallery.querySelector(".ghint");
-      if (hint) hint.style.opacity = gp > 0.92 ? 0 : 0.9;
-    }
-
     if (closeC){
       var cr = closeC.getBoundingClientRect();
       var vis = 1 - Math.min(1, Math.max(0, (cr.top - window.innerHeight * 0.2) / (window.innerHeight * 0.7)));
@@ -585,16 +568,6 @@ footer .mono{color:var(--fog)}
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", update);
   update();
-
-  /* ---- set the horizontal section's height from its content ---- */
-  function sizeGallery(){
-    if (!gallery || !gtrack || window.innerWidth < 760) return;
-    var extra = gtrack.scrollWidth - window.innerWidth + 56;
-    gallery.style.height = (window.innerHeight + Math.max(0, extra) * 1.05) + "px";
-    update();
-  }
-  window.addEventListener("resize", sizeGallery);
-  sizeGallery();
 
   /* ---- magnetic buttons ---- */
   document.querySelectorAll(".btn").forEach(function(b){
