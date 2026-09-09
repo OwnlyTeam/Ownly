@@ -86,7 +86,7 @@ public sealed class TweakRunner
 
     private ActionResult ApplyAction(Tweak tweak)
     {
-        var result = ElevatedRunner.Run(tweak.ActionApply!, tweak.NeedsAdmin, tweak.ActionShowWindow, tweak.ActionWait);
+        var result = ElevatedRunner.Run(tweak.ActionApply!, tweak.NeedsAdmin, tweak.ActionShowWindow, tweak.ActionWait, tweak.ActionTimeoutSeconds);
         _activity.Append(tweak.Title, tweak.Description, tweak.NeedsAdmin ? "Command (admin)" : "Command", tweak.NeedsAdmin, result.Success, result.Output);
 
         if (result.Cancelled)
@@ -104,7 +104,7 @@ public sealed class TweakRunner
 
         if (!tweak.ActionWait)
         {
-            return new ActionResult(true, "Started in a new window — watch it there.");
+            return new ActionResult(true, "Done. It runs in the background — check Activity if you want the output.");
         }
         return result.Success
             ? new ActionResult(true, string.IsNullOrWhiteSpace(result.Output) ? "Done." : Shorten(result.Output))

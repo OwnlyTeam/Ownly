@@ -30,7 +30,8 @@ public sealed record Tweak(
     string? ActionApply = null,
     string? ActionRevert = null,
     bool ActionWait = true,
-    bool ActionShowWindow = true)
+    bool ActionShowWindow = true,
+    int ActionTimeoutSeconds = 90)
 {
     public string ChangeId => "tweak:" + Id;
 }

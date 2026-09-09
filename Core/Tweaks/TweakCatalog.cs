@@ -158,17 +158,17 @@ public static class TweakCatalog
 
         Act("tools.restore-point", "tools", "Safety", "Create a system restore point",
             "Make a Windows restore point called \"Ownly\" so you can roll the whole system back if needed.",
-            "Moderate", admin: true, reversible: false,
+            "Moderate", admin: true, reversible: false, wait: true, timeoutSeconds: 240,
             apply: "Enable-ComputerRestore -Drive $env:SystemDrive -EA SilentlyContinue; Checkpoint-Computer -Description 'Ownly' -RestorePointType 'MODIFY_SETTINGS'; Write-Output 'Restore point created.'"),
 
         Act("tools.sfc", "tools", "Repair", "Run System File Checker (SFC)",
-            "Scan Windows system files for corruption and repair them. Takes several minutes; runs in its own window.",
-            "Moderate", admin: true, reversible: false, wait: false,
+            "Scan Windows system files for corruption and repair them. This can take 10–15 minutes. Ownly stays usable while it runs; the full output lands in Activity.",
+            "Moderate", admin: true, reversible: false, wait: true, timeoutSeconds: 2400,
             apply: "sfc /scannow"),
 
         Act("tools.dism", "tools", "Repair", "Repair the Windows image (DISM)",
-            "Use Windows Update to repair the component store. Run this before SFC if SFC cannot fix everything. Runs in its own window.",
-            "Moderate", admin: true, reversible: false, wait: false,
+            "Use Windows Update to repair the component store. Run this before SFC if SFC cannot fix everything. Can take 10–20 minutes; output lands in Activity.",
+            "Moderate", admin: true, reversible: false, wait: true, timeoutSeconds: 2400,
             apply: "DISM /Online /Cleanup-Image /RestoreHealth"),
     };
 
@@ -187,7 +187,8 @@ public static class TweakCatalog
 
     private static Tweak Act(string id, string section, string group, string title, string description,
         string risk, bool admin, bool reversible, string apply, string? revert = null, string? note = null,
-        bool wait = true) =>
+        bool wait = true, int timeoutSeconds = 90) =>
         new(id, section, group, title, description, risk, TweakKind.Action, admin, reversible, note,
-            Registry: null, ActionApply: apply, ActionRevert: revert, ActionWait: wait, ActionShowWindow: true);
+            Registry: null, ActionApply: apply, ActionRevert: revert, ActionWait: wait, ActionShowWindow: false,
+            ActionTimeoutSeconds: timeoutSeconds);
 }

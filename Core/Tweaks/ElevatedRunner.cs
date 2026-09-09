@@ -44,11 +44,13 @@ public static class ElevatedRunner
     }
 
     /// <summary>
-    /// Runs <paramref name="script"/> in PowerShell. If elevation is needed a UAC prompt appears.
-    /// When <paramref name="wait"/> is false the call returns as soon as the window is launched.
+    /// Runs <paramref name="script"/> in a hidden PowerShell process. If elevation is needed a UAC
+    /// prompt appears; there is no visible console. Output is read back from a transcript file.
+    /// When <paramref name="wait"/> is false the call returns as soon as the process is launched.
     /// </summary>
     public static ElevatedResult Run(string script, bool elevated, bool showWindow, bool wait, int timeoutSeconds = 90)
     {
+        _ = showWindow; // the console is always hidden now
         var id = Guid.NewGuid().ToString("N");
         var scriptPath = Path.Combine(WorkDir, id + ".ps1");
         var transcriptPath = Path.Combine(WorkDir, id + ".log");
@@ -60,21 +62,15 @@ public static class ElevatedRunner
         wrapped.AppendLine(script);
         wrapped.AppendLine("} catch { Write-Output ('Ownly: ' + $_.Exception.Message) }");
         wrapped.AppendLine("try { Stop-Transcript | Out-Null } catch { }");
-        if (showWindow && wait)
-        {
-            wrapped.AppendLine("Write-Host ''");
-            wrapped.AppendLine("Write-Host 'Done. This window closes in a moment.' -ForegroundColor DarkGray");
-            wrapped.AppendLine("Start-Sleep -Seconds 2");
-        }
         File.WriteAllText(scriptPath, wrapped.ToString());
 
         var psi = new ProcessStartInfo
         {
             FileName = "powershell.exe",
-            Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"{scriptPath}\"",
+            Arguments = $"-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File \"{scriptPath}\"",
             UseShellExecute = true,
-            WindowStyle = showWindow ? ProcessWindowStyle.Normal : ProcessWindowStyle.Hidden,
-            CreateNoWindow = !showWindow
+            WindowStyle = ProcessWindowStyle.Hidden,
+            CreateNoWindow = true
         };
         if (elevated && !IsProcessElevated())
         {
@@ -91,12 +87,12 @@ public static class ElevatedRunner
 
             if (!wait)
             {
-                return new ElevatedResult(true, false, 0, "Started in a separate window.");
+                return new ElevatedResult(true, false, 0, "Started — this one runs in the background.");
             }
 
             if (!process.WaitForExit(timeoutSeconds * 1000))
             {
-                return new ElevatedResult(false, false, -1, "The command is still running after the time limit. Check the window that opened.");
+                return new ElevatedResult(false, false, -1, "This is taking longer than expected. It may still be running in the background.");
             }
 
             var output = ReadTranscript(transcriptPath);
