@@ -10,11 +10,10 @@
     <Viewbox Stretch="Uniform">
         <Grid Width="100" Height="100">
             <Path x:Name="RingPath"
-                  StrokeThickness="13"
+                  StrokeThickness="15"
                   StrokeStartLineCap="Round"
                   StrokeEndLineCap="Round"
-                  StrokeLineJoin="Round"
-                  Data="M 87,38 L 87,60 Q 87,87 60,87 L 40,87 Q 13,87 13,60 L 13,40 Q 13,13 40,13 L 60,13 Q 74,13 80,20" />
+                  Data="M 61,17.6 A 34,34 0 1 1 39,17.6" />
         </Grid>
     </Viewbox>
 </UserControl>
