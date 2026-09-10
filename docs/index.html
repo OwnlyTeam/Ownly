@@ -232,7 +232,9 @@ section.block{padding:120px 0;border-bottom:1px solid var(--edge)}
 /* side rail — only on screens wide enough to keep it out of the content gutter */
 .adrail{display:none}
 @media(min-width:1600px){
-  .adrail{display:block;position:fixed;right:16px;top:50%;transform:translateY(-50%);width:160px;z-index:40}
+  .adrail{display:block;position:fixed;top:50%;transform:translateY(-50%);width:160px;z-index:40}
+  .adrail.right{right:16px}
+  .adrail.left{left:16px}
   .adrail .adlabel{text-align:center}
   .adrail .adbox{max-width:none;margin:0;padding:8px}
   .adrail .adframe{max-width:none}
@@ -324,7 +326,7 @@ footer .mono{color:var(--fog)}
   </div>
 </div>
 
-<aside class="adrail" aria-label="Advertisement">
+<aside class="adrail right" aria-label="Advertisement">
   <p class="eyebrow adlabel">Ad</p>
   <div class="adbox">
     <!-- BEGIN AADS AD UNIT 2454858 -->
@@ -332,6 +334,17 @@ footer .mono{color:var(--fog)}
       <iframe data-aa="2454858" src="//acceptable.a-ads.com/2454858/?size=Adaptive"></iframe>
     </div>
     <!-- END AADS AD UNIT 2454858 -->
+  </div>
+</aside>
+
+<aside class="adrail left" aria-label="Advertisement">
+  <p class="eyebrow adlabel">Ad</p>
+  <div class="adbox">
+    <!-- BEGIN AADS AD UNIT 2454859 -->
+    <div class="adframe">
+      <iframe data-aa="2454859" src="//acceptable.a-ads.com/2454859/?size=Adaptive"></iframe>
+    </div>
+    <!-- END AADS AD UNIT 2454859 -->
   </div>
 </aside>
 
@@ -408,6 +421,19 @@ footer .mono{color:var(--fog)}
       <span>Remove web results from Start</span><span>Classic right-click menu</span><span>Disable Copilot</span><span>Left-align the taskbar</span><span>Turn off Fast Startup</span><span>Minimum diagnostic data</span><span>Disable the telemetry service</span><span>Flush the DNS cache</span><span>Seconds in the clock</span><span>Deny camera &amp; mic to apps</span><span>Create a restore point</span><span>Run SFC &amp; DISM</span>
     </div>
   </div>
+
+  <section class="adband">
+    <div class="wrap">
+      <p class="eyebrow adlabel">Advertisement · keeps Ownly free</p>
+      <div class="adbox">
+        <!-- BEGIN AADS AD UNIT 2454860 -->
+        <div class="adframe">
+          <iframe data-aa="2454860" src="//acceptable.a-ads.com/2454860/?size=Adaptive"></iframe>
+        </div>
+        <!-- END AADS AD UNIT 2454860 -->
+      </div>
+    </div>
+  </section>
 
   <section class="stats">
     <div class="wrap">
