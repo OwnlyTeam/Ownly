@@ -254,9 +254,20 @@ section.block{padding:120px 0;border-bottom:1px solid var(--edge)}
   font-size:1.3rem;line-height:1;color:#141416;padding:0 2px;opacity:.7;
 }
 #adblock-note button:hover{opacity:1}
+#adblock-note button[hidden]{display:none}
+#adblock-note.nudge{animation:abnNudge .5s var(--ease) 1}
+@keyframes abnNudge{
+  0%,100%{transform:translateY(0)}
+  30%{transform:translateY(6px)}
+  60%{transform:translateY(-2px)}
+}
 body.has-abn header{top:var(--abnH,52px)}
 body.has-abn #progress{top:var(--abnH,52px)}
 body.has-abn main{padding-top:var(--abnH,52px)}
+/* while ads are blocked, the download buttons are visibly inert */
+body.ads-blocked a.btn[href*="Ownly.exe"]{
+  opacity:.45;cursor:not-allowed;filter:grayscale(.4);
+}
 @media(max-width:640px){#adblock-note .wrap{padding:11px 20px}}
 
 /* ── safety ── */
@@ -304,7 +315,11 @@ footer .mono{color:var(--fog)}
 
 <div id="adblock-note" hidden>
   <div class="wrap">
-    <span><strong>The ads aren't loading.</strong> Ownly is completely free with no sponsors — these small ads are the only thing covering its costs. Please allow ads for <strong>ownly.win</strong> (or open the site in another browser) to help keep it free.</span>
+    <span>
+      <strong id="abn-lead">The ads aren't loading.</strong>
+      Ownly is completely free with no sponsors — these small ads are the only thing covering its costs.
+      <strong>The download is disabled until you allow ads for ownly.win</strong> (or open the site in another browser). Everything else on the page still works.
+    </span>
     <button id="adblock-x" type="button" aria-label="Dismiss">&times;</button>
   </div>
 </div>
@@ -622,18 +637,59 @@ footer .mono{color:var(--fog)}
   var x = document.getElementById("adblock-x");
   var KEY = "ownly-adnote-hidden";
 
-  function show(){
-    try { if (sessionStorage.getItem(KEY)) return; } catch(e){}
-    if (!note.hidden) return;
-    note.hidden = false;
-    document.body.classList.add("has-abn");
-    var apply = function(){
-      document.body.style.setProperty("--abnH", note.offsetHeight + "px");
-    };
-    apply();
-    window.addEventListener("resize", apply);
+  var dlLinks = [].slice.call(document.querySelectorAll('a[href*="Ownly.exe"]'));
+  var lead = document.getElementById("abn-lead");
+  var leadDefault = lead ? lead.textContent : "";
+  var armed = false;
+  var nudgeTimer, leadTimer;
+
+  function apply(){
+    document.body.style.setProperty("--abnH", note.offsetHeight + "px");
   }
+
+  function show(){
+    if (note.hidden){
+      note.hidden = false;
+      document.body.classList.add("has-abn");
+      apply();
+      window.addEventListener("resize", apply);
+    }
+  }
+
+  function nudge(){
+    show();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    note.classList.remove("nudge");
+    void note.offsetWidth;              // restart the animation
+    note.classList.add("nudge");
+    clearTimeout(nudgeTimer);
+    nudgeTimer = setTimeout(function(){ note.classList.remove("nudge"); }, 900);
+    if (lead){
+      lead.textContent = "Enable ads for ownly.win to download.";
+      clearTimeout(leadTimer);
+      leadTimer = setTimeout(function(){ lead.textContent = leadDefault; }, 5000);
+    }
+  }
+
+  function block(){
+    if (armed) return;
+    armed = true;
+    document.body.classList.add("ads-blocked");
+    if (x) x.hidden = true;            // message stays put while ads are blocked
+    show();
+    dlLinks.forEach(function(a){
+      a.setAttribute("aria-disabled", "true");
+      a.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        nudge();
+      });
+    });
+  }
+
+  // if ads aren't blocked, the X simply dismisses the notice for the session
   if (x) x.addEventListener("click", function(){
+    if (armed) return;
     note.hidden = true;
     document.body.classList.remove("has-abn");
     try { sessionStorage.setItem(KEY, "1"); } catch(e){}
@@ -663,12 +719,11 @@ footer .mono{color:var(--fog)}
   }
 
   function check(){
-    var blocked = baitBlocked() || framesBlocked();
+    if (baitBlocked() || framesBlocked()) { block(); return; }
     // second opinion: a network request to the ad host
-    if (blocked) { show(); }
-    else if (window.fetch) {
+    if (window.fetch) {
       fetch("//acceptable.a-ads.com/favicon.ico?_=" + Date.now(), { mode: "no-cors", cache: "no-store" })
-        .catch(function(){ show(); });
+        .catch(function(){ block(); });
     }
   }
 
