@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ownly — TikTok cut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ink:#000; --paper:#fff; --fog:#8b8b8f; --edge:#1e1e20; --edge2:#313135;
+    --raise:#0b0b0c; --raise2:#141416; --amber:#f5c044;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#000;overflow:hidden;width:100%;height:100%}
+  body{font-family:"IBM Plex Sans",system-ui,sans-serif}
+  #fitwrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+
+  /* ===== 1080x1920 stage, scaled to fit the window ===== */
+  #stage{
+    position:relative;width:1080px;height:1920px;background:#000;overflow:hidden;
+    transform-origin:center center;flex:none;
+  }
+  #stage::after{ /* subtle vignette for depth */
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:60;
+    background:radial-gradient(120% 90% at 50% 42%,transparent 55%,rgba(0,0,0,.55) 100%);
+  }
+
+  .cap{position:absolute;left:0;right:0;text-align:center;z-index:40;
+    font-family:"IBM Plex Mono",monospace;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--fog);font-size:19px;opacity:0;transition:opacity .6s var(--ease)}
+  .cap.show{opacity:1}
+  .cap.top{top:150px}
+  .cap.bot{bottom:190px}
+
+  /* ===== opening spark ===== */
+  #spark{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;
+    background:#fff;transform:translate(-50%,-50%) scale(0);
+    box-shadow:0 0 60px 20px rgba(255,255,255,.5);opacity:0}
+
+  /* ===== laptop ===== */
+  #laptop{position:absolute;top:50%;left:50%;width:760px;
+    transform:translate(-50%,-50%) scale(.62);opacity:0;
+    transition:opacity 1s var(--ease),transform 1.4s var(--ease);
+    filter:drop-shadow(0 60px 90px rgba(0,0,0,.9))}
+  #laptop.in{opacity:1;transform:translate(-50%,-50%) scale(.92)}
+  #laptop.zoom{transform:translate(-50%,-44%) scale(3.9);opacity:1;
+    transition:transform 1.9s var(--ease),opacity .6s var(--ease)}
+  #laptop.gone{opacity:0}
+  .lid{position:relative;border:14px solid #17171a;border-radius:26px;background:#000;
+    box-shadow:inset 0 0 0 2px #2a2a2e;overflow:hidden;aspect-ratio:16/10}
+  .screen{position:absolute;inset:0;overflow:hidden;background:#05060a}
+  .base{height:26px;margin:0 -60px;border-radius:0 0 40px 40px;
+    background:linear-gradient(#26262b,#111114);box-shadow:0 20px 40px rgba(0,0,0,.6)}
+  .notch{position:absolute;top:6px;left:50%;width:70px;height:6px;border-radius:3px;
+    background:#26262b;transform:translateX(-50%)}
+
+  /* ===== windows-style desktop (inside .screen and later fullscreen) ===== */
+  #desk{position:absolute;inset:0;opacity:0;transition:opacity .8s var(--ease);
+    background:
+      radial-gradient(90% 70% at 22% 18%,#20222b 0%,transparent 60%),
+      radial-gradient(80% 80% at 82% 88%,#181a22 0%,transparent 55%),
+      linear-gradient(150deg,#0c0d11,#000);}
+  #desk.on{opacity:1}
+  #desk .wall-ring{position:absolute;top:50%;left:50%;width:64%;aspect-ratio:1;
+    transform:translate(-50%,-50%);opacity:.055}
+  #desk .wall-ring svg{width:100%;height:100%}
+  .dicon{position:absolute;left:60px;width:132px;text-align:center;color:#e8e8ea;
+    font-size:22px;font-family:"IBM Plex Sans";text-shadow:0 2px 8px rgba(0,0,0,.7)}
+  .dicon .box{width:92px;height:92px;margin:0 auto 12px;border-radius:20px;
+    background:linear-gradient(160deg,#141416,#000);border:1px solid #2a2a2e;
+    display:flex;align-items:center;justify-content:center}
+  .dicon .box svg{width:52px;height:52px}
+  #ic-own{top:96px}
+  #ic-own.sel .box{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+  #ic-pc{top:300px}
+  .taskbar{position:absolute;left:0;right:0;bottom:0;height:54px;
+    background:rgba(10,10,12,.72);backdrop-filter:blur(8px);
+    border-top:1px solid #1c1c1f;display:flex;align-items:center;justify-content:center;gap:26px}
+  .taskbar .t{width:26px;height:26px;border-radius:6px;background:#1c1c1f}
+  .taskbar .t.mid{background:#2b2b30}
+  .clock{position:absolute;right:22px;bottom:8px;font-family:"IBM Plex Mono";
+    font-size:14px;color:#c9c9cc;text-align:right;line-height:1.35}
+
+  /* ===== cursor ===== */
+  #cursor{position:absolute;top:0;left:0;width:26px;height:26px;z-index:45;opacity:0;
+    transition:opacity .4s;filter:drop-shadow(0 3px 5px rgba(0,0,0,.7));will-change:transform}
+  #cursor.on{opacity:1}
+  #cursor svg{width:100%;height:100%}
+  #cursor.click{animation:clk .32s var(--ease)}
+  @keyframes clk{50%{transform:scale(.8)}}
+
+  /* ===== Ownly app window ===== */
+  #app{position:absolute;top:50%;left:50%;width:964px;height:1360px;
+    transform:translate(-50%,-50%) scale(.2);opacity:0;
+    border:1px solid var(--edge2);border-radius:22px;overflow:hidden;background:var(--ink);
+    box-shadow:0 80px 160px -50px rgba(0,0,0,.95);
+    transition:transform 1s var(--ease),opacity .5s var(--ease);z-index:30}
+  #app.in{transform:translate(-50%,-50%) scale(1);opacity:1}
+  #app.hero{transform:translate(-50%,-50%) scale(.86);opacity:0;
+    transition:transform 1.1s var(--ease),opacity 1.1s var(--ease)}
+  .titlebar{display:flex;align-items:center;gap:14px;height:64px;padding:0 26px;
+    border-bottom:1px solid var(--edge)}
+  .titlebar .r{width:22px;height:22px}
+  .titlebar .wm{font-family:"Archivo";font-weight:800;letter-spacing:.24em;font-size:16px;color:#d3d3d6}
+  .titlebar .ctl{margin-left:auto;color:var(--fog);letter-spacing:.3em;font-size:14px}
+  .appbody{display:grid;grid-template-columns:210px 1fr;height:calc(100% - 64px)}
+  .appnav{border-right:1px solid var(--edge);padding:22px 0;font-size:19px;color:var(--fog)}
+  .appnav div{padding:12px 26px;transition:color .3s,box-shadow .3s}
+  .appnav div.on{color:#fff;box-shadow:inset 3px 0 0 #fff}
+  .appnav .sep{height:1px;background:var(--edge);margin:14px 22px;padding:0}
+  .appmain{padding:40px 40px}
+  .appmain .eyebrow{font-family:"IBM Plex Mono";font-size:14px;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--fog)}
+  .appmain h2{font-family:"Archivo";font-weight:800;font-size:44px;letter-spacing:-.02em;
+    margin:14px 0 34px;color:#fff}
+  .prow{border:1px solid var(--edge);border-radius:14px;background:var(--raise);
+    padding:22px 24px;display:flex;align-items:center;gap:18px;margin-bottom:16px;
+    opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+  .prow.show{opacity:1;transform:none}
+  .prow .pt{font-size:21px;font-weight:500;color:#eaeaec}
+  .prow .pc{display:flex;gap:10px;margin-top:10px}
+  .chip{font-family:"IBM Plex Mono";font-size:12px;letter-spacing:.06em;color:var(--fog);
+    border:1px solid var(--edge2);border-radius:6px;padding:3px 8px}
+  .chip.a{color:var(--amber);border-color:#5a4c2a}
+  .sw{margin-left:auto;flex:none;width:60px;height:33px;border-radius:99px;
+    border:1px solid var(--edge2);background:var(--raise2);position:relative;transition:.35s var(--ease)}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:25px;height:25px;border-radius:50%;
+    background:var(--fog);transition:.35s var(--ease)}
+  .sw.on{background:#fff;border-color:#fff}
+  .sw.on::after{left:30px;background:#000}
+  .pageflash{position:absolute;inset:64px 0 0 210px;background:#000;opacity:0;
+    pointer-events:none;transition:opacity .25s}
+
+  /* ===== final hero ===== */
+  #hero{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:0;opacity:0;z-index:35;
+    transition:opacity 1s var(--ease)}
+  #hero.in{opacity:1}
+  #hero .ring{width:230px;height:230px;margin-bottom:54px}
+  #hero .ring svg{width:100%;height:100%;overflow:visible}
+  #hero .ring circle{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round;
+    stroke-dasharray:214;stroke-dashoffset:214;transform:rotate(-88deg);transform-origin:50% 50%}
+  #hero.in .ring circle{animation:draw 1.3s var(--ease) .2s forwards}
+  @keyframes draw{to{stroke-dashoffset:20}}
+  #hero .wm{font-family:"Archivo";font-weight:900;font-size:40px;letter-spacing:.42em;
+    color:#fff;transform:translateX(.21em);opacity:0}
+  #hero.in .wm{animation:fu .8s var(--ease) .7s forwards}
+  #hero h1{font-family:"Archivo";font-weight:900;font-size:108px;line-height:1;letter-spacing:-.03em;
+    color:#fff;text-align:center;margin:40px 0 24px;opacity:0}
+  #hero.in h1{animation:fu .9s var(--ease) 1s forwards}
+  #hero .sub{font-size:26px;color:var(--fog);opacity:0}
+  #hero.in .sub{animation:fu .9s var(--ease) 1.25s forwards}
+  #hero .url{margin-top:70px;font-family:"IBM Plex Mono";font-size:34px;letter-spacing:.14em;
+    color:#fff;padding:18px 40px;border:1px solid var(--edge2);border-radius:14px;opacity:0}
+  #hero.in .url{animation:fu .9s var(--ease) 1.6s forwards}
+  @keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+  #hero .wm.f2,#hero.in .wm.f2{transform:translateX(.21em)}
+
+  /* replay */
+  #replay{position:fixed;right:16px;bottom:16px;z-index:99;background:#141416;color:#fff;
+    border:1px solid #313135;border-radius:8px;padding:9px 16px;font-family:"IBM Plex Mono";
+    font-size:13px;cursor:pointer;opacity:.5}
+  #replay:hover{opacity:1}
+  .fade-black{position:absolute;inset:0;background:#000;z-index:55;opacity:0;
+    transition:opacity .5s var(--ease);pointer-events:none}
+  .fade-black.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="fitwrap">
+<div id="stage">
+  <div id="spark"></div>
+
+  <p class="cap top" id="cap1">A fresh install of Windows</p>
+  <p class="cap bot" id="cap2"></p>
+
+  <div id="laptop">
+    <div class="lid">
+      <div class="notch"></div>
+      <div class="screen">
+        <div id="desk">
+          <div class="wall-ring"><svg viewBox="0 0 100 100"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round"/></svg></div>
+          <div class="dicon" id="ic-own"><div class="box"><svg viewBox="0 0 100 100"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round"/></svg></div>Ownly</div>
+          <div class="dicon" id="ic-pc"><div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#8b8b8f" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4"/></svg></div>This PC</div>
+          <div class="clock" id="clock">9:41<br>Wed, Sep 10</div>
+          <div class="taskbar"><span class="t"></span><span class="t mid"></span><span class="t"></span><span class="t"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="base"></div>
+  </div>
+
+  <!-- Ownly app -->
+  <div id="app">
+    <div class="titlebar">
+      <span class="r"><svg viewBox="0 0 100 100"><path d="M 61 17.6 A 34 34 0 1 1 39 17.6" fill="none" stroke="#d3d3d6" stroke-width="13" stroke-linecap="round"/></svg></span>
+      <span class="wm">OWNLY</span>
+      <span class="ctl">&minus;&nbsp;&#9633;&nbsp;&times;</span>
+    </div>
+    <div class="appbody">
+      <div class="appnav" id="nav">
+        <div data-k="overview">Overview</div>
+        <div data-k="clean">Clean</div>
+        <div data-k="customize">Customize</div>
+        <div data-k="optimize">Optimize</div>
+        <div data-k="privacy" class="on">Privacy</div>
+        <div data-k="tools">Tools</div>
+        <div class="sep"></div>
+        <div data-k="changes">Changes</div>
+        <div data-k="activity">Activity</div>
+      </div>
+      <div class="appmain" id="main">
+        <p class="eyebrow" id="eyebrow">Privacy</p>
+        <h2 id="ptitle">Close the taps.</h2>
+        <div id="rows"></div>
+      </div>
+      <div class="pageflash" id="flash"></div>
+    </div>
+  </div>
+
+  <!-- final -->
+  <div id="hero">
+    <div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34"/></svg></div>
+    <div class="wm">OWNLY</div>
+    <h1>Windows,<br>your way.</h1>
+    <p class="sub">Free · Reversible · No account</p>
+    <div class="url">ownly.win</div>
+  </div>
+
+  <div id="cursor"><svg viewBox="0 0 24 24"><path d="M4 2l16 8-7 2-2 7z" fill="#fff" stroke="#000" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+  <div class="fade-black" id="fb"></div>
+</div>
+</div>
+
+<button id="replay">↻ replay</button>
+
+<script>
+(function(){
+  var stage=document.getElementById("stage");
+  function fit(){
+    var s=Math.min(window.innerWidth/1080,window.innerHeight/1920);
+    stage.style.transform="scale("+s+")";
+  }
+  window.addEventListener("resize",fit); fit();
+
+  var $=function(s){return document.querySelector(s)};
+  var cursor=$("#cursor");
+  // cursor position helpers (stage coords)
+  function moveCursor(x,y,ms){
+    return new Promise(function(res){
+      cursor.style.transition="transform "+ms+"ms cubic-bezier(.16,1,.3,1)";
+      cursor.style.transform="translate("+x+"px,"+y+"px)";
+      setTimeout(res,ms);
+    });
+  }
+  function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+  var cap2=document.getElementById("cap2");
+  function say(txt,ms){
+    cap2.textContent=txt; cap2.classList.add("show");
+    if(ms) setTimeout(function(){cap2.classList.remove("show")},ms);
+  }
+  function clickFx(){cursor.classList.remove("click");void cursor.offsetWidth;cursor.classList.add("click")}
+
+  var PRIVACY=[
+    ["Set diagnostic data to the minimum",["MODERATE RISK","NEEDS ADMIN"],1],
+    ["Turn off online speech recognition",["LOW RISK"],1],
+    ["Stop tracking which apps you open",["LOW RISK"],1],
+    ["Deny camera &amp; mic to background apps",["MODERATE RISK"],0]
+  ];
+  var OPTIMIZE=[
+    ["Best-performance visual effects",["LOW RISK"],1],
+    ["Turn off Fast Startup",["MODERATE RISK"],1],
+    ["Remove menu-open animation delay",["LOW RISK"],1],
+    ["Disable the telemetry service",["MODERATE RISK","NEEDS ADMIN"],1]
+  ];
+  var CUSTOMIZE=[
+    ["Classic right-click menu",["LOW RISK"],1],
+    ["Left-align the taskbar",["LOW RISK"],1],
+    ["Show file extensions",["LOW RISK"],1],
+    ["Seconds in the system clock",["LOW RISK"],1]
+  ];
+
+  function renderRows(list){
+    var box=$("#rows"); box.innerHTML="";
+    list.forEach(function(r){
+      var d=document.createElement("div");
+      d.className="prow";
+      d.innerHTML='<div><div class="pt">'+r[0]+'</div><div class="pc">'+
+        r[1].map(function(c){return '<span class="chip'+(/MODERATE/.test(c)?' a':'')+'">'+c+'</span>'}).join("")+
+        '</div></div><span class="sw"></span>';
+      box.appendChild(d);
+    });
+  }
+  function showRows(delay){
+    var rows=document.querySelectorAll("#rows .prow");
+    rows.forEach(function(r,i){setTimeout(function(){r.classList.add("show")},delay+i*120)});
+  }
+  function flipToggles(list,base){
+    var rows=document.querySelectorAll("#rows .prow");
+    list.forEach(function(r,i){
+      if(r[2]) setTimeout(function(){rows[i].querySelector(".sw").classList.add("on")},base+i*260);
+    });
+  }
+  async function pageSwap(k,eyebrow,title,list){
+    var f=$("#flash"); f.style.opacity="1";
+    await wait(230);
+    document.querySelectorAll("#nav div").forEach(function(n){n.classList.toggle("on",n.dataset.k===k)});
+    $("#eyebrow").textContent=eyebrow; $("#ptitle").textContent=title;
+    renderRows(list);
+    f.style.opacity="0";
+    showRows(120); flipToggles(list,700);
+  }
+
+  var TL=[];
+  function run(){
+    // reset
+    ["laptop"].forEach(function(id){$("#"+id).className=""});
+    $("#app").className=""; $("#hero").className=""; $("#desk").className="wall-ring-parent";
+    $("#desk").classList.remove("on");
+    cursor.className=""; cursor.style.transform="translate(120px,1500px)";
+    $("#cap1").classList.remove("show"); $("#fb").classList.remove("on");
+    $("#ic-own").classList.remove("sel");
+    var spark=$("#spark");
+    spark.style.transition="none"; spark.style.transform="translate(-50%,-50%) scale(0)"; spark.style.opacity="0";
+    void spark.offsetWidth;
+
+    TL.forEach(clearTimeout); TL=[];
+    var t=function(fn,ms){TL.push(setTimeout(fn,ms))};
+
+    // 1 — spark
+    t(function(){spark.style.transition="transform 1.2s cubic-bezier(.16,1,.3,1),opacity .6s";
+      spark.style.transform="translate(-50%,-50%) scale(1)";spark.style.opacity="1"},250);
+    t(function(){spark.style.transition="transform .8s,opacity .8s";
+      spark.style.transform="translate(-50%,-50%) scale(26)";spark.style.opacity="0"},1500);
+
+    // 2 — laptop
+    t(function(){$("#laptop").classList.add("in")},1900);
+    t(function(){$("#cap1").classList.add("show")},2400);
+
+    // 3 — zoom into screen, desktop appears
+    t(function(){$("#desk").classList.add("on")},3600);
+    t(function(){$("#cap1").classList.remove("show")},3800);
+    t(function(){$("#laptop").classList.add("zoom")},4200);
+
+    // 4 — cursor enters, drags to Ownly icon, double-clicks
+    t(function(){
+      cursor.classList.add("on");
+      moveCursor(150,1480,10).then(function(){
+        return moveCursor(190,300,1400);   // to the Ownly icon
+      }).then(function(){
+        $("#ic-own").classList.add("sel"); clickFx();
+        return wait(180);
+      }).then(function(){ clickFx(); });
+    },5400);
+
+    // 5 — laptop fades, app opens
+    t(function(){$("#laptop").classList.add("gone")},7100);
+    t(function(){
+      renderRows(PRIVACY);
+      $("#app").classList.add("in");
+    },7250);
+    t(function(){ showRows(300); say("Every change is explained and risk-labelled",3200); },7800);
+    t(function(){ moveCursor(720,470,900); },8300);
+    t(function(){ flipToggles(PRIVACY,0); },8800);
+
+    // 6 — page walk-through (theme never breaks)
+    t(function(){ moveCursor(150,470,700); pageSwap("optimize","Optimize","Trim the drag.",OPTIMIZE);
+      say("The theme never breaks — page to page",3000); },11500);
+    t(function(){ pageSwap("customize","Customize","Make it feel right.",CUSTOMIZE); },15200);
+
+    // changes tab — the payoff: everything logged, one click back
+    t(function(){
+      var f=$("#flash"); f.style.opacity="1";
+      setTimeout(function(){
+        document.querySelectorAll("#nav div").forEach(function(n){n.classList.toggle("on",n.dataset.k==="changes")});
+        $("#eyebrow").textContent="Changes";
+        $("#ptitle").textContent="14 changes · all reversible.";
+        var list=[
+          ["Classic right-click menu",["reg · HKCU"],0],
+          ["Left-align the taskbar",["reg · HKCU"],0],
+          ["Turn off Fast Startup",["admin · powercfg"],0],
+          ["Minimum diagnostic data",["admin · HKLM"],0]
+        ];
+        renderRows(list);
+        document.querySelectorAll("#rows .prow .sw").forEach(function(s){
+          s.className=""; s.textContent="Restore ↺";
+          s.style.cssText="margin-left:auto;font-family:'IBM Plex Mono';font-size:13px;color:#fff;border:1px solid #313135;border-radius:7px;padding:7px 12px";
+        });
+        f.style.opacity="0"; showRows(120);
+        say("One click puts any of it back",3400);
+      },230);
+    },18800);
+
+    // 7 — collapse to hero
+    t(function(){ $("#app").classList.add("hero"); cursor.classList.remove("on"); cap2.classList.remove("show"); },22400);
+    t(function(){ $("#hero").classList.add("in"); },23000);
+    // hold on hero, then loop
+    t(function(){ run(); }, 31000);
+  }
+
+  document.getElementById("replay").addEventListener("click",run);
+  run();
+})();
+</script>
+</body>
+</html>
