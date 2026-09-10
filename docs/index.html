@@ -229,6 +229,36 @@ section.block{padding:120px 0;border-bottom:1px solid var(--edge)}
 .adbox .adframe{width:100%;max-width:728px;margin:auto}
 .adbox iframe{width:100%;height:100px;display:block;border:0}
 
+/* side rail — only on screens wide enough to keep it out of the content gutter */
+.adrail{display:none}
+@media(min-width:1600px){
+  .adrail{display:block;position:fixed;right:16px;top:50%;transform:translateY(-50%);width:160px;z-index:40}
+  .adrail .adlabel{text-align:center}
+  .adrail .adbox{max-width:none;margin:0;padding:8px}
+  .adrail .adframe{max-width:none}
+  .adrail iframe{height:600px}
+}
+
+/* ── ad-block / broken-ads notice ── */
+#adblock-note{
+  position:fixed;left:0;right:0;top:0;z-index:120;
+  background:var(--amber);color:#141416;
+  font-size:.92rem;line-height:1.5;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);
+}
+#adblock-note .wrap{display:flex;align-items:flex-start;gap:14px;padding:13px 32px}
+#adblock-note strong{font-weight:700}
+#adblock-note a{color:#141416;text-decoration:underline}
+#adblock-note button{
+  margin-left:auto;flex:none;background:none;border:0;cursor:pointer;
+  font-size:1.3rem;line-height:1;color:#141416;padding:0 2px;opacity:.7;
+}
+#adblock-note button:hover{opacity:1}
+body.has-abn header{top:var(--abnH,52px)}
+body.has-abn #progress{top:var(--abnH,52px)}
+body.has-abn main{padding-top:var(--abnH,52px)}
+@media(max-width:640px){#adblock-note .wrap{padding:11px 20px}}
+
 /* ── safety ── */
 .safety{margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 @media (max-width:820px){.safety{grid-template-columns:1fr}}
@@ -271,6 +301,24 @@ footer .mono{color:var(--fog)}
 </head>
 <body>
 <div id="progress"></div>
+
+<div id="adblock-note" hidden>
+  <div class="wrap">
+    <span><strong>The ads aren't loading.</strong> Ownly is completely free with no sponsors — these small ads are the only thing covering its costs. Please allow ads for <strong>ownly.win</strong> (or open the site in another browser) to help keep it free.</span>
+    <button id="adblock-x" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+</div>
+
+<aside class="adrail" aria-label="Advertisement">
+  <p class="eyebrow adlabel">Ad</p>
+  <div class="adbox">
+    <!-- BEGIN AADS AD UNIT 2454858 -->
+    <div class="adframe">
+      <iframe data-aa="2454858" src="//acceptable.a-ads.com/2454858/?size=Adaptive"></iframe>
+    </div>
+    <!-- END AADS AD UNIT 2454858 -->
+  </div>
+</aside>
 
 <header id="site-header">
   <div class="wrap bar">
@@ -566,6 +614,68 @@ footer .mono{color:var(--fog)}
 </footer>
 
 <script>
+/* ---- broken / blocked ad detection ---- */
+(function(){
+  "use strict";
+  var note = document.getElementById("adblock-note");
+  if (!note) return;
+  var x = document.getElementById("adblock-x");
+  var KEY = "ownly-adnote-hidden";
+
+  function show(){
+    try { if (sessionStorage.getItem(KEY)) return; } catch(e){}
+    if (!note.hidden) return;
+    note.hidden = false;
+    document.body.classList.add("has-abn");
+    var apply = function(){
+      document.body.style.setProperty("--abnH", note.offsetHeight + "px");
+    };
+    apply();
+    window.addEventListener("resize", apply);
+  }
+  if (x) x.addEventListener("click", function(){
+    note.hidden = true;
+    document.body.classList.remove("has-abn");
+    try { sessionStorage.setItem(KEY, "1"); } catch(e){}
+  });
+
+  // 1. bait element using class names common ad blockers hide
+  var bait = document.createElement("div");
+  bait.className = "adsbox ad-banner ad-placement pub_300x250 text-ad textAd";
+  bait.style.cssText = "position:absolute;left:-9999px;top:-9999px;width:12px;height:12px;pointer-events:none";
+  bait.innerHTML = "&nbsp;";
+  document.body.appendChild(bait);
+
+  function baitBlocked(){
+    if (!bait.offsetParent && bait.offsetHeight === 0) return true;
+    var cs = getComputedStyle(bait);
+    return bait.offsetHeight === 0 || cs.display === "none" || cs.visibility === "hidden";
+  }
+
+  function framesBlocked(){
+    var frames = document.querySelectorAll('iframe[data-aa]');
+    if (!frames.length) return false;
+    for (var i = 0; i < frames.length; i++){
+      // a served ad iframe reports a non-trivial rendered height
+      if (frames[i].getBoundingClientRect().height > 8) return false;
+    }
+    return true;
+  }
+
+  function check(){
+    var blocked = baitBlocked() || framesBlocked();
+    // second opinion: a network request to the ad host
+    if (blocked) { show(); }
+    else if (window.fetch) {
+      fetch("//acceptable.a-ads.com/favicon.ico?_=" + Date.now(), { mode: "no-cors", cache: "no-store" })
+        .catch(function(){ show(); });
+    }
+  }
+
+  if (document.readyState === "complete") setTimeout(check, 2500);
+  else window.addEventListener("load", function(){ setTimeout(check, 2500); });
+})();
+
 (function(){
   "use strict";
   var root = document.documentElement;
