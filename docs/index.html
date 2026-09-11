@@ -223,22 +223,11 @@ section.block{padding:120px 0;border-bottom:1px solid var(--edge)}
 .adband .adlabel{color:var(--fog-dim);font-size:.62rem;letter-spacing:.22em;margin-bottom:14px;text-align:center}
 .adbox{
   border:1px solid var(--edge);border-radius:12px;background:var(--raise);
-  padding:14px;display:flex;align-items:center;justify-content:center;
-  max-width:760px;margin:0 auto;
+  padding:14px;margin:0 auto;max-width:760px;min-height:96px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
-.adbox .adframe{width:100%;max-width:728px;margin:auto}
-.adbox iframe{width:100%;height:100px;display:block;border:0}
-
-/* side rail — only on screens wide enough to keep it out of the content gutter */
-.adrail{display:none}
-@media(min-width:1600px){
-  .adrail{display:block;position:fixed;top:50%;transform:translateY(-50%);width:160px;z-index:40}
-  .adrail.right{right:16px}
-  .adrail .adlabel{text-align:center}
-  .adrail .adbox{max-width:none;margin:0;padding:8px}
-  .adrail .adframe{max-width:none}
-  .adrail iframe{height:600px}
-}
+.adbox>div{width:100%}
+.adbox iframe,.adbox img{max-width:100%}
 
 /* ── ad-block / broken-ads notice ── */
 #adblock-note{
@@ -325,17 +314,6 @@ footer .mono{color:var(--fog)}
   </div>
 </div>
 
-<aside class="adrail right" aria-label="Advertisement">
-  <p class="eyebrow adlabel">Ad</p>
-  <div class="adbox">
-    <!-- BEGIN AADS AD UNIT 2454858 -->
-    <div class="adframe">
-      <iframe data-aa="2454858" src="//acceptable.a-ads.com/2454858/?size=Adaptive"></iframe>
-    </div>
-    <!-- END AADS AD UNIT 2454858 -->
-  </div>
-</aside>
-
 <header id="site-header">
   <div class="wrap bar">
     <a class="brand" href="#top" aria-label="Ownly home">
@@ -410,38 +388,12 @@ footer .mono{color:var(--fog)}
     </div>
   </div>
 
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN AADS AD UNIT 2454860 -->
-        <div class="adframe">
-          <iframe data-aa="2454860" src="//acceptable.a-ads.com/2454860/?size=Adaptive"></iframe>
-        </div>
-        <!-- END AADS AD UNIT 2454860 -->
-      </div>
-    </div>
-  </section>
-
   <section class="stats">
     <div class="wrap">
       <div class="stat reveal"><b data-count="40" data-suffix="+">0</b><span>reversible Windows tweaks, grouped by what they touch</span></div>
       <div class="stat reveal d1"><b data-count="1">0</b><span>click in the Changes list to undo any of them</span></div>
       <div class="stat reveal d2"><b data-count="0">0</b><span>telemetry, accounts, or background services of its own</span></div>
       <div class="stat reveal d3"><b data-count="100" data-suffix="%">0</b><span>local — every action logged with the exact command it ran</span></div>
-    </div>
-  </section>
-
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN AADS AD UNIT 2454854 -->
-        <div class="adframe">
-          <iframe data-aa="2454854" src="//acceptable.a-ads.com/2454854/?size=Adaptive&background_color=transparent&title_color=ffffff&title_hover_color=1b1818&text_color=ffffff&link_color=ffffff&link_hover_color=1b1818"></iframe>
-        </div>
-        <!-- END AADS AD UNIT 2454854 -->
-      </div>
     </div>
   </section>
 
@@ -526,11 +478,10 @@ footer .mono{color:var(--fog)}
     <div class="wrap">
       <p class="eyebrow adlabel">Advertisement · keeps Ownly free</p>
       <div class="adbox">
-        <!-- BEGIN AADS AD UNIT 2454852 -->
-        <div class="adframe">
-          <iframe data-aa="2454852" src="//acceptable.a-ads.com/2454852/?size=Adaptive&background_color=transparent&title_color=ffffff&title_hover_color=d0a403&text_color=ffffff&link_color=ffffff&link_hover_color=d0a403"></iframe>
-        </div>
-        <!-- END AADS AD UNIT 2454852 -->
+        <!-- BEGIN ADSTERRA NATIVE BANNER -->
+        <script async="async" data-cfasync="false" src="https://arkgleamfox.com/e6bd9cfb466a91b9d817e6ba93a0a944/invoke.js"></script>
+        <div id="container-e6bd9cfb466a91b9d817e6ba93a0a944"></div>
+        <!-- END ADSTERRA NATIVE BANNER -->
       </div>
     </div>
   </section>
@@ -560,19 +511,6 @@ footer .mono{color:var(--fog)}
     </div>
   </section>
 
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN AADS AD UNIT 2454855 -->
-        <div class="adframe">
-          <iframe data-aa="2454855" src="//acceptable.a-ads.com/2454855/?size=Adaptive"></iframe>
-        </div>
-        <!-- END AADS AD UNIT 2454855 -->
-      </div>
-    </div>
-  </section>
-
   <section class="block" id="install">
     <div class="wrap">
       <p class="eyebrow reveal">Before you install</p>
@@ -588,19 +526,6 @@ footer .mono{color:var(--fog)}
       <div class="warn reveal">
         <b>SMARTSCREEN</b>
         This preview build isn't code-signed yet, so Windows may show a blue "Windows protected your PC" box the first time you run it. Click <b>More info</b>, then <b>Run anyway</b>. Signing is on the list.
-      </div>
-    </div>
-  </section>
-
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN AADS AD UNIT 2454856 -->
-        <div class="adframe">
-          <iframe data-aa="2454856" src="//acceptable.a-ads.com/2454856/?size=Adaptive"></iframe>
-        </div>
-        <!-- END AADS AD UNIT 2454856 -->
       </div>
     </div>
   </section>
@@ -621,18 +546,6 @@ footer .mono{color:var(--fog)}
     </div>
   </section>
 
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN AADS AD UNIT 2454857 -->
-        <div class="adframe">
-          <iframe data-aa="2454857" src="//acceptable.a-ads.com/2454857/?size=Adaptive"></iframe>
-        </div>
-        <!-- END AADS AD UNIT 2454857 -->
-      </div>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -722,22 +635,19 @@ footer .mono{color:var(--fog)}
     return bait.offsetHeight === 0 || cs.display === "none" || cs.visibility === "hidden";
   }
 
-  function framesBlocked(){
-    var frames = document.querySelectorAll('iframe[data-aa]');
-    if (!frames.length) return false;
-    for (var i = 0; i < frames.length; i++){
-      // a served ad iframe reports a non-trivial rendered height
-      if (frames[i].getBoundingClientRect().height > 8) return false;
-    }
-    return true;
+  function adSlotEmpty(){
+    // the ad network injects nodes into this container once it loads
+    var c = document.querySelector('[id^="container-"]');
+    if (!c) return false;
+    return c.children.length === 0 && c.getBoundingClientRect().height < 8;
   }
 
   function check(){
-    if (baitBlocked() || framesBlocked()) { block(); return; }
-    // second opinion: a network request to the ad host
+    if (baitBlocked()) { block(); return; }
+    // second opinion: a network request to the ad host + an empty slot
     if (window.fetch) {
-      fetch("//acceptable.a-ads.com/favicon.ico?_=" + Date.now(), { mode: "no-cors", cache: "no-store" })
-        .catch(function(){ block(); });
+      fetch("https://arkgleamfox.com/favicon.ico?_=" + Date.now(), { mode: "no-cors", cache: "no-store" })
+        .catch(function(){ if (adSlotEmpty()) block(); });
     }
   }
 
@@ -844,5 +754,9 @@ footer .mono{color:var(--fog)}
   });
 })();
 </script>
+
+<!-- Adsterra -->
+<script src="https://arkgleamfox.com/54/9c/54/549c5449c575f86f30da3e74c307d6f7.js"></script>
+<script src="https://arkgleamfox.com/0f/d5/e7/0fd5e721742669f6c094cd1e0aa310e8.js"></script>
 </body>
 </html>
