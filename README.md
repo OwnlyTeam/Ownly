@@ -46,7 +46,7 @@ Requires the .NET 8 SDK and the Windows App SDK workload.
 
 ```powershell
 dotnet publish .\Ownly.csproj -c Release -r win-x64 -p:Platform=x64 --self-contained true `
-  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+  -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:IncludeAllContentForSelfExtract=true
 ```
 
 ## Not affiliated with Microsoft

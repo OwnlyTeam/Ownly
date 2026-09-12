@@ -65,5 +65,12 @@
     <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
     <!-- Trimming is disabled: this app uses reflection-based JSON, which trimming can silently break. -->
     <PublishTrimmed>False</PublishTrimmed>
+    <!--
+      Required for single-file publish: WinUI3 loads its compiled XAML from resources.pri at
+      runtime. IncludeNativeLibrariesForSelfExtract alone only extracts native DLLs, not that
+      file, so the bundled exe throws XamlParseException in MainWindow's InitializeComponent
+      the moment it launches. This extracts all Content items (resources.pri included) instead.
+    -->
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
 </Project>
