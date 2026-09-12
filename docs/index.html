@@ -261,6 +261,45 @@ body.ads-blocked a.btn[href*="Ownly.exe"]{
 }
 @media(max-width:640px){#adblock-note .wrap{padding:11px 20px}}
 
+/* ── paywall ── */
+.paywall{
+  position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.72);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  backdrop-filter:blur(3px);
+}
+.paywall[hidden]{display:none}
+.pw-card{
+  position:relative;width:100%;max-width:440px;background:var(--raise);
+  border:1px solid var(--edge-2);border-radius:18px;padding:34px 30px 28px;
+}
+.pw-close{
+  position:absolute;top:14px;right:14px;background:none;border:0;cursor:pointer;
+  font-size:1.4rem;line-height:1;color:var(--fog);padding:2px 6px;opacity:.7;
+}
+.pw-close:hover{opacity:1;color:var(--paper)}
+.pw-card h3{font-size:2.1rem;font-weight:900;margin:8px 0 4px}
+.pw-card h3 sup{font-size:1.1rem;font-weight:700;color:var(--fog-dim);margin-left:6px}
+.pw-sub{color:var(--fog);font-size:.94rem;margin:0 0 22px}
+.pw-methods{display:flex;flex-direction:column;gap:16px;margin-bottom:22px}
+.pw-method{border:1px solid var(--edge);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:16px}
+.pw-qr{
+  flex:none;width:76px;height:76px;border:1.5px dashed var(--edge-2);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.56rem;letter-spacing:.06em;
+  color:var(--fog-dim);line-height:1.4;padding:4px;
+}
+.pw-btc-icon{flex:none;width:76px;height:76px;border-radius:8px;background:var(--raise-2);color:var(--amber);font-size:2rem;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pw-method-body{flex:1;min-width:0}
+.pw-label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.66rem;letter-spacing:.1em;color:var(--fog-dim);margin-bottom:4px}
+.pw-value{font-size:.98rem;font-weight:600;color:var(--paper);word-break:break-all}
+.pw-copy{
+  margin-top:8px;background:none;border:1px solid var(--edge-2);border-radius:6px;
+  color:var(--fog);font-size:.72rem;padding:4px 10px;cursor:pointer;font-family:inherit;
+}
+.pw-copy:hover{color:var(--paper);border-color:var(--fog-dim)}
+.pw-card .btn{width:100%;justify-content:center}
+.pw-fine{font-size:.76rem;color:var(--fog-dim);text-align:center;margin:14px 0 0}
+
 /* ── safety ── */
 .safety{margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
 @media (max-width:820px){.safety{grid-template-columns:1fr}}
@@ -308,10 +347,41 @@ footer .mono{color:var(--fog)}
   <div class="wrap">
     <span>
       <strong id="abn-lead">The ads aren't loading.</strong>
-      Ownly is completely free with no sponsors — these small ads are the only thing covering its costs.
+      These small ads help keep Ownly's price down.
       <strong>The download is disabled until you allow ads for ownly.win</strong> (or open the site in another browser). Everything else on the page still works.
     </span>
     <button id="adblock-x" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+</div>
+
+<div id="paywall" class="paywall" hidden>
+  <div class="pw-card" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+    <button class="pw-close" id="pw-close" type="button" aria-label="Close">&times;</button>
+    <p class="eyebrow" style="margin-bottom:2px">Get Ownly</p>
+    <h3 id="pw-title">$PRICE<sup>one-time</sup></h3>
+    <p class="pw-sub">Pay with Cash App or Bitcoin, then grab the download below.</p>
+    <div class="pw-methods">
+      <div class="pw-method">
+        <div class="pw-qr">QR CODE<br>(scan in<br>Cash App)</div>
+        <div class="pw-method-body">
+          <div class="pw-label">CASH APP</div>
+          <div class="pw-value">$YourCashtag</div>
+        </div>
+      </div>
+      <div class="pw-method">
+        <div class="pw-btc-icon">₿</div>
+        <div class="pw-method-body">
+          <div class="pw-label">BITCOIN</div>
+          <div class="pw-value" id="pw-btc-address">your-btc-address-here</div>
+          <button class="pw-copy" type="button" data-copy-target="pw-btc-address">Copy address</button>
+        </div>
+      </div>
+    </div>
+    <a class="btn" id="pw-download" href="https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      I've paid — download Ownly
+    </a>
+    <p class="pw-fine">Purchases are final. Keep your payment confirmation.</p>
   </div>
 </div>
 
@@ -331,7 +401,7 @@ footer .mono{color:var(--fog)}
       <a href="#safety">Safety</a>
       <a href="#install">Before you install</a>
     </nav>
-    <a class="btn sm" href="https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe">Download</a>
+    <a class="btn sm" href="#get-ownly" data-open-paywall>Get Ownly</a>
   </div>
 </header>
 
@@ -343,16 +413,16 @@ footer .mono{color:var(--fog)}
     <div class="wrap hero-grid">
       <div>
         <div class="mark" aria-hidden="true"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="34"/></svg></div>
-        <p class="eyebrow">Free · Windows 10 &amp; 11 · No account</p>
+        <p class="eyebrow">$<span class="pw-price-inline">PRICE</span> one-time · Windows 10 &amp; 11 · No account</p>
         <h1>
           <span class="line"><span>Windows,</span></span>
           <span class="line"><span>your way.</span></span>
         </h1>
         <p class="lede">Ownly strips the noise out of Windows 10 and 11 — ads, telemetry, background clutter, forced features — and writes down every change so you can undo any of it.</p>
         <div class="cta-row">
-          <a class="btn" href="https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe">
+          <a class="btn" href="#get-ownly" data-open-paywall>
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Download for Windows
+            Get Ownly for Windows
           </a>
           <a class="btn ghost" href="https://github.com/OwnlyTeam/Ownly">View the source</a>
         </div>
@@ -578,11 +648,11 @@ footer .mono{color:var(--fog)}
     <div class="wrap">
       <p class="eyebrow reveal">Get it</p>
       <h2 class="wipe">Take your PC back.</h2>
-      <p class="reveal d1">Free, forever. No catch — it's a tool, not a product.</p>
+      <p class="reveal d1">One-time payment. Yours to keep — it's a tool, not a subscription.</p>
       <div class="cta-row reveal d2" style="animation:none;display:flex;flex-wrap:wrap;gap:13px">
-        <a class="btn" href="https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe">
+        <a class="btn" href="#get-ownly" data-open-paywall>
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Download Ownly 0.0.1
+          Get Ownly 0.0.1
         </a>
         <a class="btn ghost" href="https://github.com/OwnlyTeam/Ownly">GitHub</a>
       </div>
@@ -710,6 +780,50 @@ footer .mono{color:var(--fog)}
 
   if (document.readyState === "complete") setTimeout(check, 2500);
   else window.addEventListener("load", function(){ setTimeout(check, 2500); });
+})();
+
+/* ---- paywall ----
+   Edit these three lines to set the real price / handles, then everything
+   below (the modal + the eyebrow) picks them up automatically. */
+(function(){
+  "use strict";
+  var PRICE = "PRICE";                 // e.g. "5"
+  var CASHTAG = "$YourCashtag";        // your Cash App $cashtag
+  var BTC_ADDRESS = "your-btc-address-here";
+
+  document.querySelectorAll(".pw-price-inline").forEach(function(el){ el.textContent = PRICE; });
+  var title = document.getElementById("pw-title");
+  if (title) title.firstChild.textContent = "$" + PRICE;
+  var cashEl = document.querySelector("#paywall .pw-method .pw-value");
+  if (cashEl) cashEl.textContent = CASHTAG;
+  var btcEl = document.getElementById("pw-btc-address");
+  if (btcEl) btcEl.textContent = BTC_ADDRESS;
+
+  var modal = document.getElementById("paywall");
+  if (!modal) return;
+  var closeBtn = document.getElementById("pw-close");
+
+  function open(){ modal.hidden = false; document.body.style.overflow = "hidden"; }
+  function close(){ modal.hidden = true; document.body.style.overflow = ""; }
+
+  document.querySelectorAll("[data-open-paywall]").forEach(function(a){
+    a.addEventListener("click", function(e){ e.preventDefault(); open(); });
+  });
+  if (closeBtn) closeBtn.addEventListener("click", close);
+  modal.addEventListener("click", function(e){ if (e.target === modal) close(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !modal.hidden) close(); });
+
+  document.querySelectorAll(".pw-copy").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var target = document.getElementById(btn.getAttribute("data-copy-target"));
+      if (!target || !navigator.clipboard) return;
+      navigator.clipboard.writeText(target.textContent.trim()).then(function(){
+        var original = btn.textContent;
+        btn.textContent = "Copied";
+        setTimeout(function(){ btn.textContent = original; }, 1500);
+      });
+    });
+  });
 })();
 
 (function(){
