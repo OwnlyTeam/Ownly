@@ -3,14 +3,19 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Animation;
 using Ownly.Views.Pages;
 using System;
+using System.Linq;
 
 namespace Ownly
 {
     public sealed partial class MainWindow : Window
     {
+        public static MainWindow? Instance { get; private set; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            Instance = this;
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
@@ -19,6 +24,16 @@ namespace Ownly
             ContentFrame.Navigate(typeof(DashboardPage), null, new SuppressNavigationTransitionInfo());
 
             Activated += OnFirstActivated;
+        }
+
+        /// <summary>Selects the matching nav item so its highlight stays in sync, then navigates (e.g. from a Dashboard card tap).</summary>
+        public void NavigateToSection(string tag)
+        {
+            var item = AppNavigation.MenuItems.OfType<NavigationViewItem>().FirstOrDefault(i => i.Tag as string == tag);
+            if (item is not null)
+            {
+                AppNavigation.SelectedItem = item;
+            }
         }
 
         private void OnFirstActivated(object sender, WindowActivatedEventArgs e)

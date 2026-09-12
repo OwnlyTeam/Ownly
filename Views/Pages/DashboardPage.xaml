@@ -19,7 +19,7 @@
                 <TextBlock Text="WELCOME TO OWNLY" Style="{StaticResource OwnlyEyebrowStyle}" />
                 <TextBlock Text="Your PC. Your way." Style="{StaticResource OwnlyDisplayTitleStyle}" Margin="0,10,0,8" />
                 <TextBlock Text="Reversible tweaks for Windows, each one explained before it runs and logged so you can undo it."
-                           FontSize="16" TextWrapping="Wrap" MaxWidth="640" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                           FontSize="16" TextWrapping="Wrap" MaxWidth="520" Foreground="{StaticResource OwnlyMutedTextBrush}" />
             </StackPanel>
 
             <Border Grid.Row="2" Style="{StaticResource OwnlyCardStyle}" Padding="30">
@@ -40,10 +40,8 @@
                             Padding="18" VerticalAlignment="Center" BorderBrush="{StaticResource OwnlyBorderStrongBrush}" BorderThickness="1">
                         <StackPanel Spacing="10" HorizontalAlignment="Center">
                             <controls:OwnlyGlyph Width="96" Height="96" HorizontalAlignment="Center" />
-                            <TextBlock Text="OWNLY 0.0.1" FontSize="13" FontWeight="SemiBold" CharacterSpacing="90"
+                            <TextBlock Text="OWNLY 1.0.0" FontSize="13" FontWeight="SemiBold" CharacterSpacing="90"
                                        Foreground="{StaticResource OwnlyTextBrush}" HorizontalAlignment="Center" Margin="0,6,0,0" />
-                            <TextBlock Text="PREVIEW BUILD" FontSize="10" FontWeight="SemiBold" CharacterSpacing="90"
-                                       Foreground="{StaticResource OwnlyMutedTextBrush}" HorizontalAlignment="Center" />
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -116,42 +114,48 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Border Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                    <Border Style="{StaticResource OwnlyCardStyle}" Padding="20" Tag="clean"
+                            Tapped="SectionCard_Tapped" PointerEntered="SectionCard_PointerEntered" PointerExited="SectionCard_PointerExited">
                         <StackPanel Spacing="10">
                             <FontIcon Glyph="&#xE74D;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
                             <TextBlock Text="Clean" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
                             <TextBlock Text="Scan for temp files and optional apps, and limit Windows suggestions." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
                         </StackPanel>
                     </Border>
-                    <Border Grid.Column="1" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                    <Border Grid.Column="1" Style="{StaticResource OwnlyCardStyle}" Padding="20" Tag="customize"
+                            Tapped="SectionCard_Tapped" PointerEntered="SectionCard_PointerEntered" PointerExited="SectionCard_PointerExited">
                         <StackPanel Spacing="10">
                             <FontIcon Glyph="&#xE70F;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
                             <TextBlock Text="Customize" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
                             <TextBlock Text="Dark mode, classic right-click menu, taskbar and File Explorer tweaks." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
                         </StackPanel>
                     </Border>
-                    <Border Grid.Column="2" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                    <Border Grid.Column="2" Style="{StaticResource OwnlyCardStyle}" Padding="20" Tag="optimize"
+                            Tapped="SectionCard_Tapped" PointerEntered="SectionCard_PointerEntered" PointerExited="SectionCard_PointerExited">
                         <StackPanel Spacing="10">
                             <FontIcon Glyph="&#xEC4A;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
                             <TextBlock Text="Optimize" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
                             <TextBlock Text="Visual-effects profile, Game Mode, power modes, and startup review." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
                         </StackPanel>
                     </Border>
-                    <Border Grid.Row="1" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                    <Border Grid.Row="1" Style="{StaticResource OwnlyCardStyle}" Padding="20" Tag="privacy"
+                            Tapped="SectionCard_Tapped" PointerEntered="SectionCard_PointerEntered" PointerExited="SectionCard_PointerExited">
                         <StackPanel Spacing="10">
                             <FontIcon Glyph="&#xE72E;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
                             <TextBlock Text="Privacy" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
                             <TextBlock Text="Limit ad personalization, activity history, and camera / mic / location access." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
                         </StackPanel>
                     </Border>
-                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource OwnlyCardStyle}" Padding="20" Tag="tools"
+                            Tapped="SectionCard_Tapped" PointerEntered="SectionCard_PointerEntered" PointerExited="SectionCard_PointerExited">
                         <StackPanel Spacing="10">
                             <FontIcon Glyph="&#xE90F;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
                             <TextBlock Text="Tools" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
                             <TextBlock Text="Startup manager, power modes, and Ownly's backup / data folder." TextWrapping="Wrap" Foreground="{StaticResource OwnlyMutedTextBrush}" />
                         </StackPanel>
                     </Border>
-                    <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource OwnlyCardStyle}" Padding="20">
+                    <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource OwnlyCardStyle}" Padding="20" Tag="changes"
+                            Tapped="SectionCard_Tapped" PointerEntered="SectionCard_PointerEntered" PointerExited="SectionCard_PointerExited">
                         <StackPanel Spacing="10">
                             <FontIcon Glyph="&#xE81C;" FontSize="22" Foreground="{StaticResource OwnlyAccentBrush}" />
                             <TextBlock Text="Changes" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
