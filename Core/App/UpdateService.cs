@@ -14,7 +14,7 @@ public sealed record UpdateCheckResult(bool Success, bool HasUpdate, string Curr
 /// </summary>
 public static class UpdateService
 {
-    public const string CurrentVersion = "0.0.1";
+    public const string CurrentVersion = "1.0.0";
     private const string ReleasesApi = "https://api.github.com/repos/OwnlyTeam/Ownly/releases/latest";
     public const string DownloadUrl = "https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe";
 

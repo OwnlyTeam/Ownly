@@ -3,7 +3,7 @@
 **Free, reversible tweaking and debloat tool for Windows 10 and 11.** Every change is explained
 before it runs, carries a risk label, and — where Windows allows it — can be undone with one click.
 
-> **Preview build (0.0.1).** Ownly changes Windows settings on your PC. Read the disclaimer it shows
+> **Ownly 1.0.0.** Ownly changes Windows settings on your PC. Read the disclaimer it shows
 > on first run. You are responsible for changes you make to your own system.
 
 ## Download
@@ -15,7 +15,7 @@ file — no installer. Put it anywhere and double-click. Delete the file to remo
 - ~470 MB (bundles its own runtime so nothing else has to be installed)
 - No account, no sign-in, no network connection required
 
-This preview build is **not code-signed yet**, so SmartScreen may warn you the first time you run
+Ownly is **not code-signed yet**, so SmartScreen may warn you the first time you run
 it — click **More info → Run anyway**.
 
 ## What it does
