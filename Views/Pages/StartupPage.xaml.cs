@@ -13,6 +13,14 @@ public sealed partial class StartupPage : Page
         InitializeComponent();
     }
 
+    private void Back_Click(object sender, RoutedEventArgs e)
+    {
+        if (Frame.CanGoBack)
+        {
+            Frame.GoBack();
+        }
+    }
+
     private async void Page_Loaded(object sender, RoutedEventArgs e)
     {
         StartupItemsPanel.Children.Clear();

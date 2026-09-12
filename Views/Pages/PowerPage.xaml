@@ -7,6 +7,13 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Padding="48,42,48,40" MaxWidth="1000" HorizontalAlignment="Left">
             <StackPanel Spacing="12">
+                <Button Click="Back_Click" Background="Transparent" BorderThickness="0" Padding="0,0,0,2"
+                        HorizontalAlignment="Left" Margin="0,0,0,4">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon Glyph="&#xE72B;" FontSize="13" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                        <TextBlock Text="Back" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                    </StackPanel>
+                </Button>
                 <TextBlock Text="POWER MODES" FontSize="12" FontWeight="SemiBold" CharacterSpacing="130" Foreground="{StaticResource OwnlyMutedTextBrush}" />
                 <TextBlock Text="Tune the balance for how you use your PC." FontSize="36" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
                 <TextBlock Text="Ownly changes only the active Windows power scheme. Every switch is logged with the previous scheme so it can be restored." FontSize="16" Foreground="{StaticResource OwnlyMutedTextBrush}" TextWrapping="Wrap" MaxWidth="720" />

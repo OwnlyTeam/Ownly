@@ -66,11 +66,28 @@ public sealed class SafetyEngine
         _changeLog = changeLog ?? new ChangeLogService();
     }
 
+    /// <summary>
+    /// Records a change for a preference that was already at its desired value when Apply ran, so
+    /// <c>IsApplied</c> (which only looks at the change log, not the live registry) reports "on"
+    /// instead of quietly reporting "off" and letting the toggle appear to reset itself.
+    /// Only writes once per feature — repeated calls while still applied are a no-op.
+    /// </summary>
+    private void EnsureApplied(string featureId, string featureName, string category, string risk, string state, string summary)
+    {
+        if (_changeLog.Read().Any(c => string.Equals(c.FeatureId, featureId, StringComparison.OrdinalIgnoreCase) && !c.IsRestored))
+        {
+            return;
+        }
+        _changeLog.Record(new ChangeRecord(Guid.NewGuid().ToString("N"), featureId, featureName, category, risk, DateTimeOffset.Now, state, state, true, summary));
+    }
+
     public ActionResult ApplyShowFileExtensions()
     {
         var before = ReadFileExtensionState();
         if (before == "0")
         {
+            EnsureApplied("customize.file-extensions", "Show file extensions", "Customize", "Low", before,
+                "File Explorer will show the extension for each file.");
             return new ActionResult(true, "File extensions are already visible.");
         }
 
@@ -124,6 +141,8 @@ public sealed class SafetyEngine
         var before = $"AppsUseLightTheme={ReadDword(PersonalizePath, "AppsUseLightTheme")};SystemUsesLightTheme={ReadDword(PersonalizePath, "SystemUsesLightTheme")}";
         if (before == "AppsUseLightTheme=0;SystemUsesLightTheme=0")
         {
+            EnsureApplied("customize.theme", "Dark mode", "Customize", "Low", before,
+                "Windows apps and system surfaces will prefer dark mode.");
             return new ActionResult(true, "Dark mode is already enabled.");
         }
 
@@ -176,6 +195,8 @@ public sealed class SafetyEngine
         var before = ReadDword(AdvertisingPath, "Enabled");
         if (before == "0")
         {
+            EnsureApplied("privacy.advertising-id", "Limit advertising personalization", "Privacy", "Low", before,
+                "Windows advertising ID personalization is disabled for this user.");
             return new ActionResult(true, "Advertising personalization is already limited.");
         }
 
@@ -212,6 +233,8 @@ public sealed class SafetyEngine
         var before = ReadCompoundState(SuggestionsPath, SuggestionValues);
         if (SuggestionValues.All(valueName => ReadStatePart(before, valueName) == "0"))
         {
+            EnsureApplied("clean.windows-suggestions", "Limit Windows suggestions", "Clean", "Low", before,
+                "Optional Windows recommendations and promotional surfaces are limited for this user.");
             return new ActionResult(true, "Windows suggestions are already limited.");
         }
 
@@ -236,6 +259,8 @@ public sealed class SafetyEngine
         var before = ReadCompoundState(ActivityPath, ActivityValues);
         if (ActivityValues.All(valueName => ReadStatePart(before, valueName) == "0"))
         {
+            EnsureApplied("privacy.activity-history", "Limit Activity History", "Privacy", "Moderate", before,
+                "Activity History publishing and sync are limited for this user.");
             return new ActionResult(true, "Activity History publishing is already limited.");
         }
 
@@ -260,6 +285,8 @@ public sealed class SafetyEngine
         var before = ReadCompoundState(SearchSettingsPath, CloudSearchValues);
         if (CloudSearchValues.All(valueName => ReadStatePart(before, valueName) == "0"))
         {
+            EnsureApplied("privacy.cloud-search", "Limit cloud content search", "Privacy", "Moderate", before,
+                "Windows search cloud content integration is limited for this user where supported.");
             return new ActionResult(true, "Cloud content search is already limited.");
         }
 
@@ -284,6 +311,8 @@ public sealed class SafetyEngine
         var before = ReadCompoundState(TypingPersonalizationPath, TypingPersonalizationValues);
         if (TypingPersonalizationValues.All(valueName => ReadStatePart(before, valueName) == "1"))
         {
+            EnsureApplied("privacy.typing", "Limit typing personalization", "Privacy", "Low", before,
+                "Implicit inking and typing collection are limited for this user.");
             return new ActionResult(true, "Typing personalization is already limited.");
         }
 
@@ -668,6 +697,7 @@ public sealed class SafetyEngine
         var before = ReadDword(path, valueName);
         if (before == desiredValue.ToString())
         {
+            EnsureApplied(featureId, featureName, category, risk, before, summary);
             return new ActionResult(true, alreadyMessage);
         }
 
@@ -689,6 +719,7 @@ public sealed class SafetyEngine
         var before = ReadString(path, valueName);
         if (string.Equals(before, desiredValue, StringComparison.OrdinalIgnoreCase))
         {
+            EnsureApplied(featureId, featureName, category, risk, before, summary);
             return new ActionResult(true, alreadyMessage);
         }
 

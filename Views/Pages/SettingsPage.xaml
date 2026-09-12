@@ -24,6 +24,23 @@
                         <TextBlock Text="Ownly will always explain a change, show its risk, and provide a restore path before applying it." Foreground="{StaticResource OwnlyMutedTextBrush}" TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
+                <Border Style="{StaticResource OwnlyCardStyle}" Padding="22">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Spacing="6" Grid.Column="0">
+                            <TextBlock Text="Updates" FontSize="17" FontWeight="SemiBold" Foreground="{StaticResource OwnlyTextBrush}" />
+                            <TextBlock x:Name="UpdateVersionText" Text="You're on Ownly 0.0.1." Foreground="{StaticResource OwnlyMutedTextBrush}" TextWrapping="Wrap" />
+                            <TextBlock x:Name="UpdateStatusText" FontSize="13" Foreground="{StaticResource OwnlyFaintTextBrush}" TextWrapping="Wrap" Margin="0,4,0,0" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                            <Button x:Name="CheckUpdateButton" Content="CHECK FOR UPDATES" Click="CheckUpdate_Click" />
+                            <Button x:Name="DownloadUpdateButton" Content="DOWNLOAD UPDATE" Style="{StaticResource OwnlyPrimaryButtonStyle}" Click="DownloadUpdate_Click" Visibility="Collapsed" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </StackPanel>
         </Grid>
     </ScrollViewer>

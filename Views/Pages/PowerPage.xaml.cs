@@ -12,6 +12,14 @@ public sealed partial class PowerPage : Page
         InitializeComponent();
     }
 
+    private void Back_Click(object sender, RoutedEventArgs e)
+    {
+        if (Frame.CanGoBack)
+        {
+            Frame.GoBack();
+        }
+    }
+
     private void Page_Loaded(object sender, RoutedEventArgs e)
     {
         ModesPanel.Children.Clear();

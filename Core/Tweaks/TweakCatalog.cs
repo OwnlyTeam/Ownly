@@ -27,9 +27,11 @@ public static class TweakCatalog
             new RegValue("HKCU", Advanced, "TaskbarMn", "DWord", 0)),
 
         Reg("clean.widgets-taskbar", "clean", "Taskbar", "Hide the Widgets button",
-            "Remove the Widgets / news-and-weather icon from the taskbar.",
-            "Low", admin: false,
-            new RegValue("HKCU", Advanced, "TaskbarDa", "DWord", 0)),
+            "Remove the Widgets / news-and-weather icon from the taskbar. Also applies the Windows policy that " +
+            "backs this off, since the plain per-user setting alone can get silently re-enabled by Windows.",
+            "Low", admin: true,
+            new RegValue("HKCU", Advanced, "TaskbarDa", "DWord", 0),
+            new RegValue("HKLM", @"SOFTWARE\Policies\Microsoft\Dsh", "AllowNewsAndInterests", "DWord", 0)),
 
         Reg("clean.copilot", "clean", "AI & suggestions", "Turn off Windows Copilot",
             "Disable the Copilot button and panel for this user.",
