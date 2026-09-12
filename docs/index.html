@@ -256,7 +256,8 @@ body.has-abn header{top:var(--abnH,52px)}
 body.has-abn #progress{top:var(--abnH,52px)}
 body.has-abn main{padding-top:var(--abnH,52px)}
 /* while ads are blocked, the download buttons are visibly inert */
-body.ads-blocked a.btn[href*="Ownly.exe"]{
+body.ads-blocked [data-open-paywall],
+body.ads-blocked #pw-email{
   opacity:.45;cursor:not-allowed;filter:grayscale(.4);
 }
 @media(max-width:640px){#adblock-note .wrap{padding:11px 20px}}
@@ -265,8 +266,9 @@ body.ads-blocked a.btn[href*="Ownly.exe"]{
 .paywall{
   position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.72);
   display:flex;align-items:center;justify-content:center;padding:24px;
-  backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px);overflow-y:auto;
 }
+.paywall .pw-card{margin:auto}
 .paywall[hidden]{display:none}
 .pw-card{
   position:relative;width:100%;max-width:440px;background:var(--raise);
@@ -297,6 +299,9 @@ body.ads-blocked a.btn[href*="Ownly.exe"]{
   color:var(--fog);font-size:.72rem;padding:4px 10px;cursor:pointer;font-family:inherit;
 }
 .pw-copy:hover{color:var(--paper);border-color:var(--fog-dim)}
+.pw-steps{margin:0 0 20px;padding-left:20px;color:var(--fog);font-size:.88rem;line-height:1.6}
+.pw-steps li+li{margin-top:4px}
+.pw-steps strong{color:var(--paper)}
 .pw-card .btn{width:100%;justify-content:center}
 .pw-fine{font-size:.76rem;color:var(--fog-dim);text-align:center;margin:14px 0 0}
 
@@ -348,7 +353,7 @@ footer .mono{color:var(--fog)}
     <span>
       <strong id="abn-lead">The ads aren't loading.</strong>
       These small ads help keep Ownly's price down.
-      <strong>The download is disabled until you allow ads for ownly.win</strong> (or open the site in another browser). Everything else on the page still works.
+      <strong>Getting Ownly is disabled until you allow ads for ownly.win</strong> (or open the site in another browser). Everything else on the page still works.
     </span>
     <button id="adblock-x" type="button" aria-label="Dismiss">&times;</button>
   </div>
@@ -359,7 +364,7 @@ footer .mono{color:var(--fog)}
     <button class="pw-close" id="pw-close" type="button" aria-label="Close">&times;</button>
     <p class="eyebrow" style="margin-bottom:2px">Get Ownly</p>
     <h3 id="pw-title">$PRICE<sup>one-time</sup></h3>
-    <p class="pw-sub">Pay with Cash App or Bitcoin, then grab the download below.</p>
+    <p class="pw-sub">Pay with Cash App or Bitcoin, then send proof to get your download link.</p>
     <div class="pw-methods">
       <div class="pw-method">
         <div class="pw-qr">QR CODE<br>(scan in<br>Cash App)</div>
@@ -377,11 +382,16 @@ footer .mono{color:var(--fog)}
         </div>
       </div>
     </div>
-    <a class="btn" id="pw-download" href="https://github.com/OwnlyTeam/Ownly/releases/latest/download/Ownly.exe">
+    <ol class="pw-steps">
+      <li>Pay using either method above.</li>
+      <li>Take a screenshot of the payment confirmation.</li>
+      <li>Email the screenshot to <strong>ownly.win@yahoo.com</strong> — include how you'd like to be contacted back.</li>
+    </ol>
+    <a class="btn" id="pw-email" href="mailto:ownly.win@yahoo.com?subject=Ownly%20purchase%20-%20payment%20proof&amp;body=Hi%2C%0A%0AI%20just%20paid%20for%20Ownly.%20My%20payment%20screenshot%20is%20attached.%0A%0APaid%20with%3A%20(Cash%20App%20%2F%20Bitcoin)%0A">
       <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 13h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      I've paid — download Ownly
+      Email payment proof
     </a>
-    <p class="pw-fine">Purchases are final. Keep your payment confirmation.</p>
+    <p class="pw-fine">A private download link is sent back once your payment is confirmed. Purchases are final.</p>
   </div>
 </div>
 
@@ -691,7 +701,7 @@ footer .mono{color:var(--fog)}
   var x = document.getElementById("adblock-x");
   var KEY = "ownly-adnote-hidden";
 
-  var dlLinks = [].slice.call(document.querySelectorAll('a[href*="Ownly.exe"]'));
+  var dlLinks = [].slice.call(document.querySelectorAll('#pw-email'));
   var lead = document.getElementById("abn-lead");
   var leadDefault = lead ? lead.textContent : "";
   var armed = false;
@@ -719,7 +729,7 @@ footer .mono{color:var(--fog)}
     clearTimeout(nudgeTimer);
     nudgeTimer = setTimeout(function(){ note.classList.remove("nudge"); }, 900);
     if (lead){
-      lead.textContent = "Enable ads for ownly.win to download.";
+      lead.textContent = "Enable ads for ownly.win to get Ownly.";
       clearTimeout(leadTimer);
       leadTimer = setTimeout(function(){ lead.textContent = leadDefault; }, 5000);
     }
@@ -780,6 +790,9 @@ footer .mono{color:var(--fog)}
 
   if (document.readyState === "complete") setTimeout(check, 2500);
   else window.addEventListener("load", function(){ setTimeout(check, 2500); });
+
+  // exposed so the paywall trigger can nudge this notice instead of opening while blocked
+  window.__ownlyAdNudge = nudge;
 })();
 
 /* ---- paywall ----
@@ -807,7 +820,14 @@ footer .mono{color:var(--fog)}
   function close(){ modal.hidden = true; document.body.style.overflow = ""; }
 
   document.querySelectorAll("[data-open-paywall]").forEach(function(a){
-    a.addEventListener("click", function(e){ e.preventDefault(); open(); });
+    a.addEventListener("click", function(e){
+      e.preventDefault();
+      if (document.body.classList.contains("ads-blocked")) {
+        if (window.__ownlyAdNudge) window.__ownlyAdNudge();
+        return;
+      }
+      open();
+    });
   });
   if (closeBtn) closeBtn.addEventListener("click", close);
   modal.addEventListener("click", function(e){ if (e.target === modal) close(); });
