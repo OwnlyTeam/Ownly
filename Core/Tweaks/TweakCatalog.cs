@@ -172,6 +172,31 @@ public static class TweakCatalog
             "Use Windows Update to repair the component store. Run this before SFC if SFC cannot fix everything. Can take 10–20 minutes; output lands in Activity.",
             "Moderate", admin: true, reversible: false, wait: true, timeoutSeconds: 2400,
             apply: "DISM /Online /Cleanup-Image /RestoreHealth"),
+
+        // ---------------- DANGEROUS ----------------
+        // Everything here is still reversible the same way as the rest of the catalog — the risk is
+        // real, not theatrical, so each one is HIGH risk, needs admin, and says exactly what it removes.
+        Reg("dangerous.uac-off", "dangerous", "System-level", "Disable User Account Control (UAC)",
+            "Stop Windows asking for permission before any app — not just Ownly — makes system-level changes.",
+            "High", admin: true, note: "Takes effect after a restart.",
+            new RegValue("HKLM", @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System", "EnableLUA", "DWord", 0)),
+
+        Reg("dangerous.smartscreen-off", "dangerous", "System-level", "Disable SmartScreen for apps & files",
+            "Stop Windows warning you before running an unrecognized or unsigned program.",
+            "High", admin: true,
+            new RegValue("HKLM", @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer", "SmartScreenEnabled", "String", Text: "Off")),
+
+        Act("dangerous.windows-update-off", "dangerous", "System-level", "Disable Windows Update",
+            "Stop and disable the Windows Update and Background Intelligent Transfer services. This PC stops receiving security patches until you turn it back on.",
+            "High", admin: true, reversible: true,
+            note: "Windows sometimes re-enables this on its own after a feature update — that's Windows, not a bug here.",
+            apply: "Stop-Service wuauserv,bits -Force -EA SilentlyContinue; Set-Service wuauserv -StartupType Disabled; Set-Service bits -StartupType Disabled; Write-Output 'Windows Update disabled.'",
+            revert: "Set-Service wuauserv -StartupType Manual; Set-Service bits -StartupType Manual; Start-Service wuauserv,bits -EA SilentlyContinue; Write-Output 'Windows Update restored.'"),
+
+        Reg("dangerous.swap-mouse", "dangerous", "Just for fun", "Swap the left and right mouse buttons",
+            "Flip your primary and secondary mouse buttons. A prank, not a performance tweak — totally harmless either way.",
+            "Low", admin: false, note: "Takes effect at your next sign-in — so it won't suddenly invert the click you're mid-way through.",
+            new RegValue("HKCU", @"Control Panel\Mouse", "SwapMouseButtons", "String", Text: "1")),
     };
 
     public static IReadOnlyList<Tweak> ForSection(string section) =>

@@ -51,6 +51,20 @@ public sealed partial class SectionPage : Page
             return;
         }
 
+        if (_section == "dangerous")
+        {
+            RenderDangerous();
+            AnimateIn();
+            return;
+        }
+
+        if (_section == "help")
+        {
+            RenderHelp();
+            AnimateIn();
+            return;
+        }
+
         if (content.ShowSystemSnapshot)
         {
             ContentStack.Children.Add(BuildSnapshotCard());
@@ -683,5 +697,110 @@ public sealed partial class SectionPage : Page
             card.Child = grid;
             ContentStack.Children.Add(card);
         }
+    }
+
+    // ---------- dangerous ----------
+
+    private void RenderDangerous()
+    {
+        var warn = new Border
+        {
+            Style = (Style)Application.Current.Resources["OwnlyRaisedCardStyle"],
+            BorderBrush = Brush("OwnlyDangerBrush"),
+            Padding = new Thickness(22)
+        };
+        var stack = new StackPanel { Spacing = 10 };
+        stack.Children.Add(new TextBlock
+        {
+            Text = "MAKE A RESTORE POINT FIRST",
+            FontSize = 12,
+            FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
+            CharacterSpacing = 90,
+            Foreground = Brush("OwnlyDangerBrush")
+        });
+        stack.Children.Add(new TextBlock
+        {
+            Text = "Everything below is still reversible from Ownly, one setting at a time. But a Windows restore point is a single \"put it all back\" button if you'd rather have that too — it costs nothing and takes about a minute.",
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = Brush("OwnlyMutedTextBrush")
+        });
+
+        var row = new Grid { ColumnSpacing = 16, Margin = new Thickness(0, 4, 0, 0) };
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+        var status = new TextBlock
+        {
+            FontSize = 13,
+            TextWrapping = TextWrapping.Wrap,
+            VerticalAlignment = VerticalAlignment.Center,
+            Foreground = Brush("OwnlyFaintTextBrush"),
+            Text = RestorePointStatusText()
+        };
+        Grid.SetColumn(status, 0);
+        row.Children.Add(status);
+
+        var button = new Button { Content = "CREATE RESTORE POINT", Style = (Style)Application.Current.Resources["OwnlyPrimaryButtonStyle"] };
+        button.Click += async (_, _) =>
+        {
+            button.IsEnabled = false;
+            var original = button.Content;
+            button.Content = "WORKING…";
+            var tweak = Ownly.Core.Tweaks.TweakCatalog.All.First(t => t.Id == "tools.restore-point");
+            var result = await Task.Run(() => new Ownly.Core.Tweaks.TweakRunner().Apply(tweak));
+            FeedbackText.Text = result.Message;
+            status.Text = RestorePointStatusText();
+            button.Content = original;
+            button.IsEnabled = true;
+        };
+        Grid.SetColumn(button, 1);
+        row.Children.Add(button);
+        stack.Children.Add(row);
+
+        warn.Child = stack;
+        ContentStack.Children.Add(warn);
+
+        RenderTweaks();
+    }
+
+    private static string RestorePointStatusText()
+    {
+        var made = new Ownly.Core.Tweaks.ActivityLog().Read()
+            .Any(e => e.Title == "Create a system restore point" && e.Success);
+        return made
+            ? "Ownly has created a restore point on this PC before."
+            : "Ownly has not created a restore point on this PC yet.";
+    }
+
+    // ---------- help ----------
+
+    private void RenderHelp()
+    {
+        ContentStack.Children.Add(BuildHeading("Before you install", null));
+        ContentStack.Children.Add(SimpleCard("Windows blocked this app (SmartScreen)",
+            "Ownly isn't code-signed yet, so Windows shows a blue \"Windows protected your PC\" box the first time you run it. Click More info, then Run anyway."));
+        ContentStack.Children.Add(SimpleCard("My antivirus flagged Ownly.exe",
+            "Some antivirus tools flag brand-new, unsigned, self-contained .exe files as a precaution — a known false positive for apps built this way, not a sign anything is wrong. Ownly's source is public on GitHub if you want to check it yourself. Code signing is on the list to clear this up for good."));
+        ContentStack.Children.Add(SimpleCard("Why is the file about 470 MB for such a simple app?",
+            "It's a single self-contained file that bundles its own copy of everything it needs to run, so nothing else has to be installed separately."));
+        ContentStack.Children.Add(SimpleCard("I downloaded it but nothing happens when I run it",
+            "If you already had a copy of Ownly.exe on this PC, your browser likely saved the new download as \"Ownly (1).exe\" or similar so it wouldn't overwrite the old one. Ownly currently needs to be named exactly Ownly.exe to start — delete the old copy, or rename the new one back to Ownly.exe, and try again."));
+
+        ContentStack.Children.Add(BuildHeading("A tweak didn't go the way you expected", null));
+        ContentStack.Children.Add(SimpleCard("A toggle looks stuck, or Windows still shows the old behavior",
+            "Some settings need a sign-out or restart to visibly apply, even though Ownly changed them right away — that's called out under the toggle when it matters. If it still isn't right, go to Changes, hit Restore, then try again."));
+        ContentStack.Children.Add(SimpleCard("I don't see a change I made in the Changes list",
+            "Only settings Ownly can automatically put back get a Restore button there. One-off actions — flushing DNS, running SFC, creating a restore point — aren't \"changes\" to undo; check Activity to confirm they ran."));
+        ContentStack.Children.Add(SimpleCard("Something in Windows looks broken after a change",
+            "Go to Changes and Restore the specific thing you turned on — most tweaks reverse cleanly that way. If you made a restore point first (Tools or Dangerous), Windows' own System Restore can roll everything back at once: search \"Create a restore point\" in the Start menu, then Recovery → Open System Restore."));
+
+        ContentStack.Children.Add(BuildHeading("How Ownly fits together", null));
+        ContentStack.Children.Add(SimpleCard("Clean · Customize · Optimize · Privacy · Tools · Dangerous",
+            "Clean removes clutter and reviews installed software. Customize reshapes how Windows looks and behaves. Optimize tunes performance and power. Privacy limits what Windows collects. Tools covers focused one-off utilities. Dangerous holds deeper, higher-risk changes for people who want to go further."));
+        ContentStack.Children.Add(SimpleCard("Changes and Restore",
+            "Every reversible setting Ownly applies is recorded in Changes with the value it had before. Hit Restore on any entry to put that one setting back — no need to remember what it used to be."));
+        ContentStack.Children.Add(SimpleCard("Activity",
+            "A running log of everything Ownly has run — the exact command or registry write, whether it needed administrator rights, and what it output. Useful for seeing exactly what happened, or for troubleshooting."));
     }
 }

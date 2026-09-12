@@ -151,6 +151,18 @@ public static class SectionCatalog
             false, false,
             Array.Empty<SectionGroup>()),
 
+        "dangerous" => new SectionContent(
+            "DANGEROUS", "The danger zone.",
+            "Deeper system changes and a couple of pointless ones. Still reversible — make a restore point first.",
+            false, false,
+            Array.Empty<SectionGroup>()),
+
+        "help" => new SectionContent(
+            "HELP", "Common problems.",
+            "Answers for install issues, a tweak that didn't go as expected, and how the app fits together.",
+            false, false,
+            Array.Empty<SectionGroup>()),
+
         _ => new SectionContent(
             "OWNLY", "Ownly workspace.",
             "A focused workspace for making Windows feel like yours.",
