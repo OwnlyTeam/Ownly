@@ -249,6 +249,10 @@ public sealed partial class SectionPage : Page
             {
                 Frame.Navigate(typeof(StartupPage));
             }
+            else if (item.NavigateTarget == "uninstall")
+            {
+                Frame.Navigate(typeof(UninstallPage));
+            }
         };
         return button;
     }

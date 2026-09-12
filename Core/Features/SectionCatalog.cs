@@ -55,6 +55,10 @@ public static class SectionCatalog
                     T("clean.background-apps", "Limit background apps", "Stop apps you are not using from running in the background for this user.", "", "Moderate"),
                     new SectionItem("clean.temp", "Move temporary files to backup", "Run a scan first, then move eligible temp files into Ownly's private backup instead of deleting them.", "", "Low", SectionItemKind.Action, ActionLabel: "SCAN & CLEAN"),
                 }),
+                new SectionGroup("Installed software", "Not reversible from Ownly — it runs each program’s own uninstaller.", new[]
+                {
+                    new SectionItem("clean.uninstall", "Uninstall programs", "See everything installed and remove what you don’t want. Checks for leftovers afterward.", "", "Moderate", SectionItemKind.Navigate, NavigateTarget: "uninstall"),
+                }),
             }),
 
         "customize" => new SectionContent(
