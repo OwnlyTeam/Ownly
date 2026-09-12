@@ -73,7 +73,7 @@
 
             <NavigationView.PaneFooter>
                 <StackPanel Margin="16,8,8,18">
-                    <TextBlock Text="OWNLY 1.0.0" FontSize="11" FontWeight="SemiBold" CharacterSpacing="80" Foreground="{StaticResource OwnlyMutedTextBrush}" />
+                    <TextBlock Text="OWNLY 1.1.0" FontSize="11" FontWeight="SemiBold" CharacterSpacing="80" Foreground="{StaticResource OwnlyMutedTextBrush}" />
                 </StackPanel>
             </NavigationView.PaneFooter>
 

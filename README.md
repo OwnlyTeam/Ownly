@@ -3,7 +3,7 @@
 **Free, reversible tweaking and debloat tool for Windows 10 and 11.** Every change is explained
 before it runs, carries a risk label, and — where Windows allows it — can be undone with one click.
 
-> **Ownly 1.0.0.** Ownly changes Windows settings on your PC. Read the disclaimer it shows
+> **Ownly 1.1.0.** Ownly changes Windows settings on your PC. Read the disclaimer it shows
 > on first run. You are responsible for changes you make to your own system.
 
 ## Download

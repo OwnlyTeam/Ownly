@@ -40,7 +40,7 @@
                             Padding="18" VerticalAlignment="Center" BorderBrush="{StaticResource OwnlyBorderStrongBrush}" BorderThickness="1">
                         <StackPanel Spacing="10" HorizontalAlignment="Center">
                             <controls:OwnlyGlyph Width="96" Height="96" HorizontalAlignment="Center" />
-                            <TextBlock Text="OWNLY 1.0.0" FontSize="13" FontWeight="SemiBold" CharacterSpacing="90"
+                            <TextBlock Text="OWNLY 1.1.0" FontSize="13" FontWeight="SemiBold" CharacterSpacing="90"
                                        Foreground="{StaticResource OwnlyTextBrush}" HorizontalAlignment="Center" Margin="0,6,0,0" />
                         </StackPanel>
                     </Border>
