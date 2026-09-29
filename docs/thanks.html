@@ -18,94 +18,93 @@
 
 <style>
 :root{
-  --ink:#000000;
-  --raise:#0b0b0c;
-  --raise-2:#141416;
-  --edge:#1e1e20;
-  --edge-2:#313135;
+  --ink:#050505;
+  --surface:#131316;
+  --surface-2:#1c1c20;
+  --line:#28282c;
+  --line-2:#3a3a40;
   --paper:#ffffff;
-  --fog:#8b8b8f;
-  --fog-dim:#59595e;
-  --amber:#f5c044;
+  --text-dim:#aaaaaf;
+  --text-faint:#707075;
   --maxw:640px;
-  --ease:cubic-bezier(.16,1,.3,1);
+  --ease:cubic-bezier(.19,1,.22,1);
 }
 *,*::before,*::after{box-sizing:border-box}
 body{
   margin:0;background:var(--ink);color:var(--paper);
   font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-  font-size:1.05rem;line-height:1.6;-webkit-font-smoothing:antialiased;
+  font-size:1.08rem;line-height:1.65;-webkit-font-smoothing:antialiased;
 }
-h1,h2{font-family:"Archivo","IBM Plex Sans",system-ui,sans-serif;margin:0;line-height:1.08;letter-spacing:-0.02em}
+h1,h2{font-family:"Archivo","IBM Plex Sans",system-ui,sans-serif;margin:0;line-height:1.08;letter-spacing:-0.02em;text-wrap:balance}
 p{margin:0}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
 .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
 .eyebrow{
   font-family:"IBM Plex Mono",ui-monospace,monospace;
-  font-size:.6875rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--fog);
+  font-size:.78rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--text-faint);
 }
 
-header{border-bottom:1px solid var(--edge)}
-.bar{display:flex;align-items:center;height:62px;max-width:760px;margin:0 auto;padding:0 24px}
-.brand{display:flex;align-items:center;gap:11px;font-family:"Archivo";font-weight:800;letter-spacing:.22em;font-size:.88rem}
-.brand svg{width:22px;height:22px}
+header{border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;height:82px;max-width:760px;margin:0 auto;padding:0 32px}
+.brand{display:flex;align-items:center;gap:12px;font-family:"Archivo";font-weight:800;letter-spacing:.14em;font-size:1.02rem}
+.brand svg{width:26px;height:26px}
 .brand circle{fill:none;stroke:var(--paper);stroke-width:12}
 
-main{padding:64px 0 48px}
-.head{text-align:center;margin-bottom:30px}
+main{padding:96px 0 72px}
+.head{text-align:center;margin-bottom:44px}
 .checkring{
-  width:56px;height:56px;border-radius:50%;border:1px solid var(--edge-2);background:var(--raise);
-  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  width:64px;height:64px;border-radius:50%;border:1px solid var(--line-2);background:var(--surface);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 28px;
 }
-.head h1{font-size:clamp(1.7rem,5vw,2.3rem);font-weight:900;margin:0 0 12px}
-.head p{color:var(--fog);max-width:44ch;margin:0 auto}
+.head h1{font-size:clamp(2rem,5.4vw,2.8rem);font-weight:900;margin:0 0 16px}
+.head p{color:var(--text-dim);max-width:44ch;margin:0 auto;font-size:1.08rem}
 
 .dlcard{
-  border:1px solid var(--edge-2);border-radius:14px;background:var(--raise);
-  padding:20px 22px;text-align:center;margin:28px 0;
+  border:1px solid var(--line-2);border-radius:16px;background:var(--surface);
+  padding:32px;text-align:center;margin:40px 0;
 }
-.dlcard .status{font-size:.82rem;color:var(--fog-dim);margin-bottom:10px}
+.dlcard .status{font-size:.88rem;color:var(--text-faint);margin-bottom:16px}
 .btn{
-  display:inline-flex;align-items:center;gap:9px;
-  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.9rem;font-weight:500;letter-spacing:.03em;
-  white-space:nowrap;padding:13px 24px;border-radius:9px;
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.92rem;font-weight:500;letter-spacing:.02em;
+  white-space:nowrap;padding:15px 28px;border-radius:10px;
   background:var(--paper);color:var(--ink);border:1px solid var(--paper);
-  transition:transform .18s var(--ease),background .18s;
+  transition:transform .2s var(--ease),box-shadow .25s;
 }
-.btn:hover{transform:translateY(-2px);background:#ededf0}
-.btn.ghost{background:transparent;color:var(--paper);border-color:var(--edge-2)}
-.btn.ghost:hover{background:var(--raise-2);box-shadow:none}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px -14px rgba(255,255,255,.35)}
+.btn.ghost{background:transparent;color:var(--paper);border-color:var(--line-2)}
+.btn.ghost:hover{background:var(--surface-2);box-shadow:none}
 
 .tipcard{
-  border:1px solid var(--edge-2);border-radius:16px;background:var(--raise);
-  padding:28px;margin-top:36px;
+  border:1px solid var(--line-2);border-radius:18px;background:var(--surface);
+  padding:36px;margin-top:44px;
 }
-.tipcard h2{font-size:1.3rem;font-weight:800;margin-bottom:8px}
-.tipcard .sub{color:var(--fog);font-size:.92rem;margin-bottom:22px}
+.tipcard h2{font-size:1.5rem;font-weight:800;margin-bottom:10px}
+.tipcard .sub{color:var(--text-dim);font-size:.96rem;margin-bottom:28px}
 .tiprow{
-  display:flex;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--edge);
+  display:flex;align-items:center;gap:16px;padding:18px 0;border-top:1px solid var(--line);
 }
 .tiprow:first-of-type{border-top:none}
 .tipicon{
-  flex:none;width:38px;height:38px;border-radius:10px;background:var(--raise-2);
-  display:flex;align-items:center;justify-content:center;border:1px solid var(--edge-2);
+  flex:none;width:42px;height:42px;border-radius:11px;background:var(--surface-2);
+  display:flex;align-items:center;justify-content:center;border:1px solid var(--line-2);
 }
-.tipicon svg{width:18px;height:18px}
+.tipicon svg{width:19px;height:19px}
 .tipbody{flex:1;min-width:0}
-.tipbody .label{font-size:.68rem;letter-spacing:.14em;color:var(--fog-dim);font-family:"IBM Plex Mono",ui-monospace,monospace;margin-bottom:2px}
-.tipbody .value{font-size:.98rem;font-weight:600}
+.tipbody .label{font-size:.68rem;letter-spacing:.14em;color:var(--text-faint);font-family:"IBM Plex Mono",ui-monospace,monospace;margin-bottom:3px}
+.tipbody .value{font-size:1.02rem;font-weight:600}
 .tipaction{flex:none}
 .tipaction button, .tipaction a{
-  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.76rem;font-weight:500;
-  background:var(--raise-2);color:var(--paper);border:1px solid var(--edge-2);border-radius:7px;
-  padding:8px 14px;cursor:pointer;transition:background .15s;display:inline-block;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.78rem;font-weight:500;
+  background:var(--surface-2);color:var(--paper);border:1px solid var(--line-2);border-radius:8px;
+  padding:9px 15px;cursor:pointer;transition:background .2s,border-color .2s;display:inline-block;
 }
-.tipaction button:hover, .tipaction a:hover{background:var(--edge-2)}
-.tipnote{margin-top:20px;font-size:.8rem;color:var(--fog-dim);text-align:center}
+.tipaction button:hover, .tipaction a:hover{background:var(--line-2);border-color:var(--text-faint)}
+.tipnote{margin-top:26px;font-size:.84rem;color:var(--text-faint);text-align:center}
 
-footer{border-top:1px solid var(--edge);padding:26px 0;margin-top:20px}
-footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--fog-dim)}
+footer{border-top:1px solid var(--line);padding:40px 0;margin-top:24px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:.84rem;color:var(--text-faint)}
 footer a{text-decoration:underline}
 </style>
 </head>
@@ -123,7 +122,7 @@ footer a{text-decoration:underline}
 <main>
   <div class="wrap head">
     <div class="checkring" aria-hidden="true">
-      <svg width="24" height="24" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="26" height="26" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
     <p class="eyebrow">Thanks for grabbing Ownly</p>
     <h1>Your download is starting.</h1>
