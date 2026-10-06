@@ -141,30 +141,6 @@ nav.links a:hover{color:var(--paper)}
 .msw.on{background:var(--paper);border-color:var(--paper)}
 .msw.on::after{left:18px;background:var(--ink)}
 
-/* ── ad band ── */
-.adband{padding:64px 0;border-top:1px solid var(--line)}
-.adband .adlabel{color:var(--text-faint);font-size:.72rem;letter-spacing:.16em;margin-bottom:18px;text-align:center;font-family:"IBM Plex Mono",ui-monospace,monospace}
-.adbox{
-  border:1px solid var(--line);border-radius:14px;background:var(--surface);
-  padding:16px;margin:0 auto;max-width:760px;min-height:60px;
-  display:flex;align-items:center;justify-content:center;overflow-x:auto;
-}
-.adbox>div{width:100%}
-.adbox iframe,.adbox img{max-width:100%}
-
-/* ── adblock note ── */
-#adblock-note{position:fixed;left:0;right:0;top:0;z-index:120;background:var(--amber);color:#141416;font-size:.92rem;line-height:1.5;box-shadow:0 8px 30px rgba(0,0,0,.4)}
-#adblock-note .wrap{display:flex;align-items:flex-start;gap:14px;padding:14px 40px}
-#adblock-note strong{font-weight:700}
-#adblock-note a{color:#141416;text-decoration:underline}
-#adblock-note button{margin-left:auto;flex:none;font-size:1.3rem;line-height:1;color:#141416;padding:0 2px;opacity:.7}
-#adblock-note button:hover{opacity:1}
-#adblock-note button[hidden]{display:none}
-body.has-abn header{top:var(--abnH,52px)}
-body.has-abn main{padding-top:var(--abnH,52px)}
-body.ads-blocked a.btn[href="get.html"]{opacity:.45;cursor:not-allowed;filter:grayscale(.4)}
-@media(max-width:640px){#adblock-note .wrap{padding:12px 20px}}
-
 /* ── stats ── */
 .stats{padding:100px 0;border-top:1px solid var(--line)}
 .stats .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:56px}
@@ -239,17 +215,6 @@ footer .mono{color:var(--text-dim)}
 <body>
 <div id="progress" style="position:fixed;top:0;left:0;height:2px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:var(--paper);z-index:70"></div>
 
-<div id="adblock-note" hidden>
-  <div class="wrap">
-    <span>
-      <strong id="abn-lead">The ads aren't loading.</strong>
-      These small ads help keep Ownly's price down.
-      <strong>The download is disabled until you allow ads for ownly.win</strong> (or open the site in another browser). Everything else still works.
-    </span>
-    <button id="adblock-x" type="button" aria-label="Dismiss">&times;</button>
-  </div>
-</div>
-
 <header id="site-header">
   <div class="wrap bar">
     <a class="brand" href="#top" aria-label="Ownly home">
@@ -301,20 +266,6 @@ footer .mono{color:var(--text-dim)}
             <div class="mrow"><div><div class="mt">Stop tracking which apps you open</div><div class="mc"><span class="mchip">LOW RISK</span></div></div><span class="msw on"></span></div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel" style="text-align:center;letter-spacing:.16em">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN ADSTERRA BANNER 728x90 -->
-        <script>
-          atOptions = { 'key':'16d02142aaba276e485124a59ca46cc2', 'format':'iframe', 'height':90, 'width':728, 'params':{} };
-        </script>
-        <script src="https://arkgleamfox.com/16d02142aaba276e485124a59ca46cc2/invoke.js"></script>
-        <!-- END ADSTERRA BANNER 728x90 -->
       </div>
     </div>
   </section>
@@ -406,18 +357,6 @@ footer .mono{color:var(--text-dim)}
     </div>
   </section>
 
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel" style="text-align:center;letter-spacing:.16em">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN ADSTERRA NATIVE BANNER -->
-        <script async="async" data-cfasync="false" src="https://arkgleamfox.com/e6bd9cfb466a91b9d817e6ba93a0a944/invoke.js"></script>
-        <div id="container-e6bd9cfb466a91b9d817e6ba93a0a944"></div>
-        <!-- END ADSTERRA NATIVE BANNER -->
-      </div>
-    </div>
-  </section>
-
   <section class="block" id="safety">
     <div class="wrap">
       <div class="block-head">
@@ -448,20 +387,6 @@ footer .mono{color:var(--text-dim)}
     </div>
   </section>
 
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel" style="text-align:center;letter-spacing:.16em">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN ADSTERRA BANNER 300x250 -->
-        <script>
-          atOptions = { 'key':'3d9440003256927186b013c9f65b6e6d', 'format':'iframe', 'height':250, 'width':300, 'params':{} };
-        </script>
-        <script src="https://arkgleamfox.com/3d9440003256927186b013c9f65b6e6d/invoke.js"></script>
-        <!-- END ADSTERRA BANNER 300x250 -->
-      </div>
-    </div>
-  </section>
-
   <section class="block" id="install">
     <div class="wrap">
       <div class="block-head">
@@ -483,20 +408,6 @@ footer .mono{color:var(--text-dim)}
     </div>
   </section>
 
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel" style="text-align:center;letter-spacing:.16em">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN ADSTERRA BANNER 468x60 -->
-        <script>
-          atOptions = { 'key':'6c7e1fca46abdccc2ebb0da7ec14a71e', 'format':'iframe', 'height':60, 'width':468, 'params':{} };
-        </script>
-        <script src="https://arkgleamfox.com/6c7e1fca46abdccc2ebb0da7ec14a71e/invoke.js"></script>
-        <!-- END ADSTERRA BANNER 468x60 -->
-      </div>
-    </div>
-  </section>
-
   <section class="get">
     <div class="wrap">
       <p class="eyebrow reveal">Get it</p>
@@ -512,19 +423,6 @@ footer .mono{color:var(--text-dim)}
     </div>
   </section>
 
-  <section class="adband">
-    <div class="wrap">
-      <p class="eyebrow adlabel" style="text-align:center;letter-spacing:.16em">Advertisement · keeps Ownly free</p>
-      <div class="adbox">
-        <!-- BEGIN ADSTERRA BANNER 320x50 -->
-        <script>
-          atOptions = { 'key':'85c67521316ad5c4a4f737931de5c8b5', 'format':'iframe', 'height':50, 'width':320, 'params':{} };
-        </script>
-        <script src="https://arkgleamfox.com/85c67521316ad5c4a4f737931de5c8b5/invoke.js"></script>
-        <!-- END ADSTERRA BANNER 320x50 -->
-      </div>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -535,82 +433,6 @@ footer .mono{color:var(--text-dim)}
 </footer>
 
 <script>
-/* ---- broken / blocked ad detection ---- */
-(function(){
-  "use strict";
-  var note = document.getElementById("adblock-note");
-  if (!note) return;
-  var x = document.getElementById("adblock-x");
-  var KEY = "ownly-adnote-hidden";
-  var dlLinks = [].slice.call(document.querySelectorAll('a.btn[href="get.html"]'));
-  var lead = document.getElementById("abn-lead");
-  var leadDefault = lead ? lead.textContent : "";
-  var armed = false;
-  var nudgeTimer, leadTimer;
-
-  function apply(){ document.body.style.setProperty("--abnH", note.offsetHeight + "px"); }
-  function show(){
-    if (note.hidden){
-      note.hidden = false;
-      document.body.classList.add("has-abn");
-      apply();
-      window.addEventListener("resize", apply);
-    }
-  }
-  function nudge(){
-    show();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    if (lead){
-      lead.textContent = "Enable ads for ownly.win to download.";
-      clearTimeout(leadTimer);
-      leadTimer = setTimeout(function(){ lead.textContent = leadDefault; }, 5000);
-    }
-  }
-  function block(){
-    if (armed) return;
-    armed = true;
-    document.body.classList.add("ads-blocked");
-    if (x) x.hidden = true;
-    show();
-    dlLinks.forEach(function(a){
-      a.setAttribute("aria-disabled", "true");
-      a.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); nudge(); });
-    });
-  }
-  if (x) x.addEventListener("click", function(){
-    if (armed) return;
-    note.hidden = true;
-    document.body.classList.remove("has-abn");
-    try { sessionStorage.setItem(KEY, "1"); } catch(e){}
-  });
-
-  var bait = document.createElement("div");
-  bait.className = "adsbox ad-banner ad-placement pub_300x250 text-ad textAd";
-  bait.style.cssText = "position:absolute;left:-9999px;top:-9999px;width:12px;height:12px;pointer-events:none";
-  bait.innerHTML = "&nbsp;";
-  document.body.appendChild(bait);
-
-  function baitBlocked(){
-    if (!bait.offsetParent && bait.offsetHeight === 0) return true;
-    var cs = getComputedStyle(bait);
-    return bait.offsetHeight === 0 || cs.display === "none" || cs.visibility === "hidden";
-  }
-  function adSlotEmpty(){
-    var c = document.querySelector('[id^="container-"]');
-    if (!c) return false;
-    return c.children.length === 0 && c.getBoundingClientRect().height < 8;
-  }
-  function check(){
-    if (baitBlocked()) { block(); return; }
-    if (window.fetch) {
-      fetch("https://arkgleamfox.com/favicon.ico?_=" + Date.now(), { mode: "no-cors", cache: "no-store" })
-        .catch(function(){ if (adSlotEmpty()) block(); });
-    }
-  }
-  if (document.readyState === "complete") setTimeout(check, 2500);
-  else window.addEventListener("load", function(){ setTimeout(check, 2500); });
-})();
-
 /* ---- minimal, restrained motion: reveal-on-scroll + progress + header state ---- */
 (function(){
   "use strict";
@@ -659,8 +481,5 @@ footer .mono{color:var(--text-dim)}
 })();
 </script>
 
-<!-- Adsterra: page-level unit removed 2026-09-11 — it was forcing a click-through
-     (Popunder-style) to reach the app. Only re-add the Social Bar unit specifically
-     (the small top-right popup), not this pair — see memory / chat for why. -->
 </body>
 </html>
